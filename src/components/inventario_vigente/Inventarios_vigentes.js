@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 
-const InventariosVigentes = () => {
-    return(
-        <div>
-            <h1>Listar Inventarios Vigentes</h1>
-        </div>
-    )
-}
-export default InventariosVigentes;
+export const InventariosVigentes = () => {
+  return (
+    <div>
+      <h2>InventariosVigentes</h2>
+    </div>
+  );
+};
