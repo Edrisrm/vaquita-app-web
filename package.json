@@ -9,6 +9,7 @@
     "axios": "^0.21.0",
     "lodash": "^4.17.20",
     "materialize-css": "^1.0.0-rc.2",
+    "moment": "^2.29.1",
     "peer": "^0.5.3",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",

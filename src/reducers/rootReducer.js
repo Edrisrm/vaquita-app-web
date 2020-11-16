@@ -1,7 +1,7 @@
-import { combineReducers } from 'redux';
-import { authReducer } from './authReducer';
-import currenInventoriesReducer from './inventariosVigentesReducer';
+import { combineReducers } from "redux";
+import { authReducer } from "./authReducer";
+import { inventoryReducer } from "./inventoryReducer";
 export const rootReducer = combineReducers({
-    auth: authReducer,
-    inventories: currenInventoriesReducer,
+  auth: authReducer,
+  inventory: inventoryReducer,
 });

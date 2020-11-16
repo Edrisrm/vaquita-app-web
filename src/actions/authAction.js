@@ -37,7 +37,7 @@ export const startGoogleLogin = (respGoogleLogin) => {
             `<hr/> <b>${body.secret_key}</b><hr/><br/>Descarga  <b>Google Authenticator</b>, desde ` +
             '<a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US" target="_blank">este link</a> ' +
             "<br/><br/> Siga las instrucciones de la app para su correcta configuracion" +
-            "<br/><br/><b>Por favor matentener en un lugar seguro</b> ",
+            "<br/><br/><b>Por favor matentener la key en un lugar seguro</b> ",
           footer: `<a  href="data:'${secret_key}'" download="secret_key.json">Descargar tu llave secreta?</a>`,
         });
       } else {
@@ -117,11 +117,9 @@ export const startLogout = () => {
     const resp = await logoutSession("auth/logout");
     const body = await resp.json();
 
-    if (body.status === "success") {
-      localStorage.removeItem("identity");
-      localStorage.removeItem("token");
-      localStorage.removeItem("token-init-date");
+    localStorage.clear();
 
+    if (body.status === "success") {
       dispatch(logout());
 
       Swal.fire({
@@ -150,10 +148,6 @@ const getIdentity = (user) => ({
 
 export const logout = () => ({
   type: types.LOGOUT,
-});
-
-export const resend_code = () => ({
-  type: types.RESEND_CODE,
 });
 
 export const TwoFactorValidate = () => ({
