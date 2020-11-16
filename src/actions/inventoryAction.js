@@ -1,13 +1,13 @@
 import { types } from "../types/types";
-
 import { fetchConsult } from "../helpers/fetchService";
-
 import { loadingInventory } from "../helpers/loadingInventory";
+
 import swal from "sweetalert2";
+import moment from "moment";
 
 export function storeInventories(inventory) {
   return async (dispatch) => {
-    const resp = await fetchConsult("inventario-vigente", inventory, "POST");
+    const resp = await fetchConsult("registro-inventario", inventory, "POST");
     const body = await resp.json();
     dispatch(addNewInventory());
 
@@ -33,6 +33,13 @@ export const inventoryStartLoading = () => {
       const body = await resp.json();
 
       const inventory = loadingInventory(body.inventory);
+
+      inventory.map((e) => ({
+        ...e,
+
+        date: moment(e.date).toDate(),
+      }));
+
       dispatch(inventoryLoaded(inventory));
     } catch (error) {
       console.log(error);

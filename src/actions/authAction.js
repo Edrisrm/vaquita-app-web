@@ -1,17 +1,12 @@
 import Swal from "sweetalert2";
 import { types } from "../types/types";
-import {
-  signup,
-  totp_validate,
-  getUser,
-  logoutSession,
-} from "../services/userService";
+import { fetchConsult } from "../helpers/fetchService";
 
 export const startGoogleLogin = (respGoogleLogin) => {
   return async (dispatch) => {
     const idToken = respGoogleLogin.tokenId;
 
-    const resp = await signup("auth", { idToken: idToken }, "POST");
+    const resp = await fetchConsult("auth", { idToken: idToken }, "POST");
     const body = await resp.json();
 
     if (body.status === "success") {
@@ -56,7 +51,7 @@ export const startGoogleLogin = (respGoogleLogin) => {
 
 export const twoFactor = (id, temp_token) => {
   return async (dispatch) => {
-    const resp = await totp_validate(
+    const resp = await fetchConsult(
       "auth/totp-validate",
       { id: id, temp_token: temp_token },
       "POST"
@@ -73,6 +68,7 @@ export const twoFactor = (id, temp_token) => {
           id: body.user.id,
           given_name: body.user.given_name,
           two_factors_activated: body.user.two_factors_activated,
+          role: body.user.role,
         })
       );
 
@@ -92,7 +88,7 @@ export const twoFactor = (id, temp_token) => {
 
 export const startChecking = () => {
   return async (dispatch) => {
-    const resp = await getUser("auth/get-user");
+    const resp = await fetchConsult("auth/get-user");
     const body = await resp.json();
 
     if (body.status === "success") {
@@ -114,7 +110,7 @@ export const startChecking = () => {
 
 export const startLogout = () => {
   return async (dispatch) => {
-    const resp = await logoutSession("auth/logout");
+    const resp = await fetchConsult("auth/logout");
     const body = await resp.json();
 
     localStorage.clear();
