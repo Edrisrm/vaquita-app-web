@@ -9,7 +9,6 @@ import {
     storeApart,
 } from '../../actions/apartAction';
 import Spinner from "../ui/Spinner";
-import { inventoryClearActive } from "../../actions/inventoryAction";
 
 const initEvent = {
     square_meter: '',
@@ -40,7 +39,7 @@ export const ApartModal = () => {
 
     const closeModal = () => {
         dispatch(uiCloseModal());
-        dispatch(inventoryClearActive());
+        dispatch(apartClearActive());
         setFormValues(initEvent);
     };
     const handleInputChange = ({target}) => {

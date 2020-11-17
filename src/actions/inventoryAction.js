@@ -49,6 +49,32 @@ export const inventoryStartLoading = () => {
   };
 };
 
+export const deleteOneInventory = (id) =>{
+  return async (dispatch, getState) =>{
+    console.log(getState().currentApart);
+    try {
+      const resp = await fetchConsult('borrar-inventario',{id:id},"DELETE" );
+      const body = await resp.json();
+      console.log(body);
+
+      if (body.status === "success") {
+          dispatch(deleteOneInventorySuccess());
+          swal.fire(
+              'Eliminado',
+              'El invetario se eliminó correctamente',
+              'success'
+          )
+      }
+  } catch (error) {
+      console.log(error);
+  }
+  }
+};
+//delete
+export const deleteOneInventorySuccess =() =>({
+  type: types.INVENTORY_DELETED,
+})
+//active-clear
 export const inventorySetActive = (inventory) => ({
   type: types.INVENTORY_SET_ACTIVE,
   payload: inventory,
@@ -57,7 +83,7 @@ export const inventorySetActive = (inventory) => ({
 export const inventoryClearActive = () => ({
   type: types.INVENTORY_CLEAR_ACTIVE,
 });
-
+//store
 const addNewInventory = () => ({
   type: types.ADD_NEW_INVENTORY,
   payload: true,
@@ -66,7 +92,7 @@ const addInventorySuccess = (inventory) => ({
   type: types.ADD_INVENTORY_SUCCESS,
   payload: inventory,
 });
-
+//get
 const inventoryLoaded = (inventory) => ({
   type: types.INVENTORY_LOADED,
   payload: inventory,

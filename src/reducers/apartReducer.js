@@ -43,10 +43,10 @@ export const apartReducer = (state = initialState, action) => {
             return{
                 ...state,
                 apart: state.apart.filter(
-                    (e) => e._id !== state.activeEvent._id
+                    (e) => e._id !== state.currentApart._id
                 ),
                 currentApart: null,
-            }
+            };
         default:
             return state;
     }

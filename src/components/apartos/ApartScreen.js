@@ -3,8 +3,13 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { uiOpenModal } from "../../actions/uiAction";
 import {ApartModal} from "./apartModal";
+import swal from "sweetalert2";
+
 import {
-    apartStartLoading
+    apartStartLoading,
+    deleteApart,
+    apartSetActive,
+    apartClearActive,
   } from "../../actions/apartAction";
 import moment from "moment";
 
@@ -22,6 +27,27 @@ export const ApartScreen = () => {
     const openModal = (e) => {
       dispatch(uiOpenModal());
     }
+    const deleteOneApart =  id => {
+      swal.fire({
+        title: '¿Estas seguro?',
+        text: "Un aparto que se elimina no se puede recuperar",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminar!!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.value) {
+            // pasarlo al action
+            dispatch( deleteApart(id) );
+        }
+    });
+    }
+    const onSelectApartOneDelete = (item) => {
+      dispatch(apartSetActive(item));
+      deleteOneApart(item);
+    };
     useEffect(() => {
         dispatch(apartStartLoading());
       }, [dispatch]);
@@ -52,7 +78,7 @@ export const ApartScreen = () => {
               <th>{item.square_meter}m²</th>
               <th>{item.apart_number}</th>
               <th>
-                <button className="btn red accent-3">
+                <button className="btn red accent-3" onClick={ () => onSelectApartOneDelete(item)}>
                   <i className="material-icons right">delete</i>
                 </button>
               </th>

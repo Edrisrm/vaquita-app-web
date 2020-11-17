@@ -46,6 +46,36 @@ export const apartStartLoading = () => {
         }
     }
 }
+
+export const deleteApart = (id) =>{
+    
+    return async (dispatch, getState) =>{
+        console.log(id);
+        console.log(getState().currentApart);
+        try {
+            const resp = await fetchConsult('borrar-aparto',{id:id},"DELETE" );
+            const body = await resp.json();
+            console.log(body);
+
+            if (body.status === "success") {
+                dispatch(deleteApartSuccess());
+                swal.fire(
+                    'Eliminado',
+                    'El Aparto se eliminó correctamente',
+                    'success'
+                )
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+
+//delete
+const deleteApartSuccess = () => ({
+    type: types.APART_DELETE_SUCCESS,
+})
 //Modal
 export const apartSetActive = (inventory) => ({
     type: types.APART_SET_ACTIVE,
