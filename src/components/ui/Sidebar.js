@@ -6,7 +6,6 @@ import { startLogout } from "../../actions/authAction";
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
-
   const handleLogin = (e) => {
     e.preventDefault();
     dispatch(startLogout());
@@ -18,8 +17,8 @@ export const Sidebar = () => {
   }, []);
   return (
     <div>
-      <nav>
-        <div className="">
+      <nav className="light-green darken-4">
+        <div className="light-green darken-4">
           <a
             href="localhost"
             data-target="slide-out"
@@ -41,7 +40,7 @@ export const Sidebar = () => {
         </div>
       </nav>
 
-      <ul id="slide-out" className="sidenav">
+      <ul id="slide-out" className="sidenav light-green">
         <li>
           <div className="user-view">
             <div className="background"></div>

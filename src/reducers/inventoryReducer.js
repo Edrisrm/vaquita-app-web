@@ -57,7 +57,7 @@ export const inventoryReducer = (state = initialState, action) => {
       return {
         ...state,
         inventory: state.inventory.filter(
-          (e) => e._id !== state.activeEvent._id
+          (e) => e._id !== state.currentInventory._id
         ),
         currentInventory: null,
       };

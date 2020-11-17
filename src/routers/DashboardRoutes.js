@@ -7,8 +7,8 @@ import {
 } from "react-router-dom";
 import "materialize-css/dist/css/materialize.min.css";
 import { InventoryScreen } from "../components/inventory/inventoryScreen";
-import { Historicos } from "../components/historicos/Historicos";
-import { Apartos } from "../components/apartos/Apartos";
+import { RecordsScreen } from "../components/historicos/recordsScreen";
+import { ApartScreen } from "../components/apartos/ApartScreen";
 import { Sidebar } from "../components/ui/Sidebar";
 
 export const DashboardRoutes = () => {
@@ -19,8 +19,8 @@ export const DashboardRoutes = () => {
         <div className="container">
           <Switch>
             <Route exact path="/inventario-vigente" component={InventoryScreen} />
-            <Route exact path="/historicos" component={Historicos} />
-            <Route exact path="/apartos" component={Apartos} />
+            <Route exact path="/historicos" component={RecordsScreen} />
+            <Route exact path="/apartos" component={ApartScreen} />
             <Redirect to="/inventario-vigente" />
           </Switch>
         </div>

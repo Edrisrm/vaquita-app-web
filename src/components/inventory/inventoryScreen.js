@@ -3,9 +3,13 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { InventoryModal } from "./inventoryModal";
 import { uiOpenModal } from "../../actions/uiAction";
+import swal from "sweetalert2";
+
 import {
   inventorySetActive,
   inventoryStartLoading,
+  deleteOneInventory,
+  inventoryClearActive
 } from "../../actions/inventoryAction";
 
 import moment from "moment";
@@ -21,7 +25,27 @@ export const InventoryScreen = () => {
     dispatch(inventorySetActive(item));
     openModal();
   };
-
+  const onSelectInventoryOneDelete = (item) =>{
+    dispatch(inventorySetActive(item));
+    oneDeleteInventory(item);
+  }
+  const oneDeleteInventory = id =>{
+    swal.fire({
+      title: '¿Estas seguro?',
+      text: "Un inventario que se elimina no se puede recuperar",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!!',
+      cancelButtonText: 'Cancelar'
+  }).then((result) => {
+      if (result.value) {
+          // pasarlo al action
+          dispatch( deleteOneInventory(id) );
+      }
+  });
+  }
   const addInventory = () => {
     openModal();
   };
@@ -40,14 +64,14 @@ export const InventoryScreen = () => {
         <h4 className="center-align">Inventario vigente del ganado</h4>
       </div>
       <div className="center-align">
-        <button onClick={addInventory} className="btn green darken-4">
+        <button onClick={addInventory} className="btn  teal darken-2">
           <i className="material-icons right">cloud</i>Agregar animal
         </button>
       </div>
       <br></br>
       <br></br>
       <hr></hr>
-      <table className="responsive-table">
+      <table className="responsive-table striped highlight indigo lighten-4">
         <thead>
           <tr>
             <th>Nº de animal</th>
@@ -75,7 +99,7 @@ export const InventoryScreen = () => {
                 >
                   <i className="material-icons left">edit</i>
                 </button>
-                <button className="btn red accent-4">
+                <button className="btn red darken-4" onClick={() => onSelectInventoryOneDelete(item)}>
                   <i className="material-icons right">delete</i>
                 </button>
               </th>
