@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import {
-  inventorySetActive,
-  inventoryClearActive,
-  inventoryStartLoading,
-} from "../../actions/inventoryAction";
 import { useSelector } from "react-redux";
 import { InventoryModal } from "./inventoryModal";
 import { uiOpenModal } from "../../actions/uiAction";
+import {
+  inventorySetActive,
+  inventoryStartLoading,
+} from "../../actions/inventoryAction";
 
 import moment from "moment";
 
-export const Inventory = () => {
+moment.locale('es');
+
+export const InventoryScreen = () => {
   const dispatch = useDispatch();
 
   const { inventory } = useSelector((state) => state.inventory);
@@ -21,8 +22,7 @@ export const Inventory = () => {
     openModal();
   };
 
-  const add = () => {
-    dispatch(inventoryClearActive());
+  const addInventory = () => {
     openModal();
   };
 
@@ -40,7 +40,7 @@ export const Inventory = () => {
         <h4 className="center-align">Inventario vigente del ganado</h4>
       </div>
       <div className="center-align">
-        <button onClick={add} className="btn green darken-4">
+        <button onClick={addInventory} className="btn green darken-4">
           <i className="material-icons right">cloud</i>Agregar animal
         </button>
       </div>

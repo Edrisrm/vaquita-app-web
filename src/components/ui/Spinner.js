@@ -1,5 +1,5 @@
 import React from 'react';
-import './Spinner.css';
+import "../../assets/css/modalStyle.css";
 const Spinner = () => {
     return ( 
         <div className="sk-fading-circle">
