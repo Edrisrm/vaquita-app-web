@@ -1,10 +1,10 @@
 /* eslint-disable no-use-before-define */
 import React, { useCallback, useEffect, useState } from "react";
-import M from "materialize-css";
 import { useDispatch, useSelector } from "react-redux";
 import { uiCloseModal, uiOpenModal } from "../../actions/uiAction";
 import Swal from "sweetalert2";
-import Spinner from "../ui/Spinner/Spinner";
+import Spinner from "../../assets/css/Spinner.css";
+import M from "materialize-css";
 
 const initEvent = {
   breed: "",

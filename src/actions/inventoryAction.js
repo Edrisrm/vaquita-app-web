@@ -1,6 +1,5 @@
 import { types } from "../types/types";
 import { fetchConsult } from "../helpers/fetchService";
-import { loadingInventory } from "../helpers/loadingInventory";
 
 import swal from "sweetalert2";
 import moment from "moment";
@@ -32,9 +31,7 @@ export const inventoryStartLoading = () => {
       const resp = await fetchConsult("inventario-en-finca");
       const body = await resp.json();
 
-      const inventory = loadingInventory(body.inventory);
-
-      inventory.map((e) => ({
+      const inventory = body.inventory.map((e) => ({
         ...e,
 
         date: moment(e.date).toDate(),
@@ -47,6 +44,13 @@ export const inventoryStartLoading = () => {
   };
 };
 
+export const inventorySetActive = (inventory) => ({
+  type: types.INVENTORY_SET_ACTIVE,
+  payload: inventory
+});
+
+export const inventoryClearActive = () => ({ type: types.INVENTORY_CLEAR_ACTIVE });
+
 const addNewInventory = () => ({
   type: types.ADD_NEW_INVENTORY,
   payload: true,
@@ -57,7 +61,7 @@ const addInventorySuccess = (inventory) => ({
 });
 
 const inventoryLoaded = (inventory) => ({
-  type: types.LOAD_INVENTORY,
+  type: types.INVENTORY_LOADED,
   payload: inventory,
 });
 
