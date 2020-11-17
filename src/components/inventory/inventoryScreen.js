@@ -40,14 +40,14 @@ export const InventoryScreen = () => {
         <h4 className="center-align">Inventario vigente del ganado</h4>
       </div>
       <div className="center-align">
-        <button onClick={addInventory} className="btn green darken-4">
+        <button onClick={addInventory} className="btn  teal darken-2">
           <i className="material-icons right">cloud</i>Agregar animal
         </button>
       </div>
       <br></br>
       <br></br>
       <hr></hr>
-      <table className="responsive-table">
+      <table className="responsive-table striped highlight indigo lighten-4">
         <thead>
           <tr>
             <th>Nº de animal</th>
@@ -75,7 +75,7 @@ export const InventoryScreen = () => {
                 >
                   <i className="material-icons left">edit</i>
                 </button>
-                <button className="btn red accent-4">
+                <button className="btn red darken-4">
                   <i className="material-icons right">delete</i>
                 </button>
               </th>

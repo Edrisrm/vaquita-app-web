@@ -23,7 +23,7 @@ export const RecordsScreen = () => {
       <br></br>
       <br></br>
       <br></br>
-      <table className="responsive-table">
+      <table className="responsive-table striped highlight indigo lighten-4">
         <thead>
           <tr>
             <th>Nº de animal</th>

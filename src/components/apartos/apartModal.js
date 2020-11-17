@@ -107,7 +107,7 @@ export const ApartModal = () => {
                    <br></br>
                    <div className="row">
                             <div className="center-aling">
-                                <button type="submit" className="btn">
+                                <button type="submit" className="btn teal darken-4">
                                     Agregar
                                 </button>
                             </div>

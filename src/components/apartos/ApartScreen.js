@@ -31,14 +31,14 @@ export const ApartScreen = () => {
                 <h4 className="center-align">Apartos de la finca</h4>
             </div>
             <div className="center-align">
-                <button onClick={addApart}  className="btn green darken-4">
+                <button onClick={addApart}  className="btn teal darken-2">
                     <i className="material-icons right">cloud</i>Agregar Aparto
                 </button>
             </div>
             <br></br>
             <br></br>
             <hr></hr>
-            <table className="responsive-table">
+            <table className=" striped highlight indigo lighten-4">
         <thead>
           <tr>
             <th>Metros cuadrados</th>
@@ -52,7 +52,7 @@ export const ApartScreen = () => {
               <th>{item.square_meter}m²</th>
               <th>{item.apart_number}</th>
               <th>
-                <button className="btn red accent-4">
+                <button className="btn red accent-3">
                   <i className="material-icons right">delete</i>
                 </button>
               </th>
