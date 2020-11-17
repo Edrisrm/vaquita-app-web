@@ -1,18 +1,18 @@
 import { types } from "../types/types";
-
 import { fetchConsult } from "../helpers/fetchService";
 
-import { loadingInventory } from "../helpers/loadingInventory";
 import swal from "sweetalert2";
+import moment from "moment";
 
-export function storeInventories(inventory) {
+export function storeInventory(inventory) {
+  console.log(inventory);
   return async (dispatch) => {
-    const resp = await fetchConsult("inventario-vigente", inventory, "POST");
+    const resp = await fetchConsult("agregar-inventario", inventory, "POST");
     const body = await resp.json();
     dispatch(addNewInventory());
 
     if (body.status === "success") {
-      dispatch(addInventorySuccess(inventory));
+      dispatch(addInventorySuccess(body.inventory));
       swal.fire({
         icon: "success",
         title: body.msg,
@@ -32,13 +32,31 @@ export const inventoryStartLoading = () => {
       const resp = await fetchConsult("inventario-en-finca");
       const body = await resp.json();
 
-      const inventory = loadingInventory(body.inventory);
-      dispatch(inventoryLoaded(inventory));
+      if (body.status === "success") {
+        const inventory = body.inventory.map((e) => ({
+          ...e,
+
+          date: moment(e.date).toDate(),
+        }));
+
+        dispatch(inventoryLoaded(inventory));
+      } else {
+        swal.fire("Error", body.msg, "error");
+      }
     } catch (error) {
       console.log(error);
     }
   };
 };
+
+export const inventorySetActive = (inventory) => ({
+  type: types.INVENTORY_SET_ACTIVE,
+  payload: inventory,
+});
+
+export const inventoryClearActive = () => ({
+  type: types.INVENTORY_CLEAR_ACTIVE,
+});
 
 const addNewInventory = () => ({
   type: types.ADD_NEW_INVENTORY,
@@ -50,7 +68,7 @@ const addInventorySuccess = (inventory) => ({
 });
 
 const inventoryLoaded = (inventory) => ({
-  type: types.LOAD_INVENTORY,
+  type: types.INVENTORY_LOADED,
   payload: inventory,
 });
 
