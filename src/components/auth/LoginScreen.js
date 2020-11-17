@@ -2,11 +2,11 @@ import React from "react";
 import Swal from "sweetalert2";
 
 import { useDispatch, useSelector } from "react-redux";
-import { startGoogleLogin, twoFactor } from "../../actions/auth";
+import { startGoogleLogin, twoFactor } from "../../actions/authAction";
 import { GoogleLogin } from "react-google-login";
 import { useForm } from "../../hooks/useForm";
 
-import "./loginScreen.css";
+import "../../assets/css/loginScreen.css";
 
 export const LoginScreen = () => {
   const dispatch = useDispatch();

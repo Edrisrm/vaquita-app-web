@@ -1,17 +1,12 @@
 import Swal from "sweetalert2";
 import { types } from "../types/types";
-import {
-  signup,
-  totp_validate,
-  getUser,
-  logoutSession,
-} from "../services/userService";
+import { fetchConsult } from "../helpers/fetchService";
 
 export const startGoogleLogin = (respGoogleLogin) => {
   return async (dispatch) => {
     const idToken = respGoogleLogin.tokenId;
 
-    const resp = await signup("auth", { idToken: idToken }, "POST");
+    const resp = await fetchConsult("auth", { idToken: idToken }, "POST");
     const body = await resp.json();
 
     if (body.status === "success") {
@@ -37,7 +32,7 @@ export const startGoogleLogin = (respGoogleLogin) => {
             `<hr/> <b>${body.secret_key}</b><hr/><br/>Descarga  <b>Google Authenticator</b>, desde ` +
             '<a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US" target="_blank">este link</a> ' +
             "<br/><br/> Siga las instrucciones de la app para su correcta configuracion" +
-            "<br/><br/><b>Por favor matentener en un lugar seguro</b> ",
+            "<br/><br/><b>Por favor matentener la key en un lugar seguro</b> ",
           footer: `<a  href="data:'${secret_key}'" download="secret_key.json">Descargar tu llave secreta?</a>`,
         });
       } else {
@@ -56,7 +51,7 @@ export const startGoogleLogin = (respGoogleLogin) => {
 
 export const twoFactor = (id, temp_token) => {
   return async (dispatch) => {
-    const resp = await totp_validate(
+    const resp = await fetchConsult(
       "auth/totp-validate",
       { id: id, temp_token: temp_token },
       "POST"
@@ -73,6 +68,7 @@ export const twoFactor = (id, temp_token) => {
           id: body.user.id,
           given_name: body.user.given_name,
           two_factors_activated: body.user.two_factors_activated,
+          role: body.user.role,
         })
       );
 
@@ -92,7 +88,7 @@ export const twoFactor = (id, temp_token) => {
 
 export const startChecking = () => {
   return async (dispatch) => {
-    const resp = await getUser("auth/get-user");
+    const resp = await fetchConsult("auth/get-user");
     const body = await resp.json();
 
     if (body.status === "success") {
@@ -114,14 +110,12 @@ export const startChecking = () => {
 
 export const startLogout = () => {
   return async (dispatch) => {
-    const resp = await logoutSession("auth/logout");
+    const resp = await fetchConsult("auth/logout");
     const body = await resp.json();
 
-    if (body.status === "success") {
-      localStorage.removeItem("identity");
-      localStorage.removeItem("token");
-      localStorage.removeItem("token-init-date");
+    localStorage.clear();
 
+    if (body.status === "success") {
       dispatch(logout());
 
       Swal.fire({
@@ -150,10 +144,6 @@ const getIdentity = (user) => ({
 
 export const logout = () => ({
   type: types.LOGOUT,
-});
-
-export const resend_code = () => ({
-  type: types.RESEND_CODE,
 });
 
 export const TwoFactorValidate = () => ({

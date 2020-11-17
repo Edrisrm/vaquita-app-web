@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import M from "materialize-css";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { startLogout } from "../../actions/auth";
+import { startLogout } from "../../actions/authAction";
 
 export const Sidebar = () => {
   const dispatch = useDispatch();
