@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { InventoryModal } from "./inventoryModal";
 import { uiOpenModal } from "../../actions/uiAction";
 import swal from "sweetalert2";
+import ReactPaginate from "react-paginate";
 
 import {
   inventorySetActive,
@@ -20,6 +21,9 @@ export const InventoryScreen = () => {
   const dispatch = useDispatch();
 
   const { inventory } = useSelector((state) => state.inventory);
+  console.log(inventory);
+  const { count } = useSelector((state) => state.inventory);
+  console.log(count);
 
   const onSelectInventory = (item) => {
     dispatch(inventorySetActive(item));
@@ -54,9 +58,12 @@ export const InventoryScreen = () => {
     dispatch(uiOpenModal());
   };
 
+  const FetchData = (page = 1) =>{
+    dispatch(inventoryStartLoading(page));
+  }
   useEffect(() => {
-    dispatch(inventoryStartLoading());
-  }, [dispatch]);
+      FetchData(1);
+  }, []);
 
   return (
     <div>
@@ -107,7 +114,13 @@ export const InventoryScreen = () => {
           ))}
         </tbody>
       </table>
-
+      <ReactPaginate
+        pageCount={Math.ceil(count / 5)}
+        pageRangeDisplayed={2}
+        marginPagesDisplayed={1}
+        onPageChange={(data) => FetchData(data.selected + 1)}
+        containerClassName={"pagination"}
+      />
       <InventoryModal />
     </div>
   );

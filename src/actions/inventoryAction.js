@@ -26,18 +26,17 @@ export function storeInventory(inventory) {
   };
 }
 
-export const inventoryStartLoading = () => {
+export const inventoryStartLoading = (page_) => {
   return async (dispatch) => {
     try {
-      const resp = await fetchConsult("inventario-en-finca");
+     
+
+      const resp = await fetchConsult(`inventario-en-finca/${page_}`);
+
       const body = await resp.json();
-
+      console.log(body)
       if (body.status === "success") {
-        const inventory = body.inventory.map((e) => ({
-          ...e,
-
-          date: moment(e.date).toDate(),
-        }));
+        const inventory = body.data;
 
         dispatch(inventoryLoaded(inventory));
       } else {
@@ -55,7 +54,6 @@ export const deleteOneInventory = (id) =>{
     try {
       const resp = await fetchConsult('borrar-inventario',{id:id},"DELETE" );
       const body = await resp.json();
-      console.log(body);
 
       if (body.status === "success") {
           dispatch(deleteOneInventorySuccess());

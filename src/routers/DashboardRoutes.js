@@ -18,10 +18,10 @@ export const DashboardRoutes = () => {
       <main>
         <div className="container">
           <Switch>
-            <Route exact path="/inventario-vigente" component={InventoryScreen} />
+            <Route exact path="/inventario-vigente/:page?" component={InventoryScreen} />
             <Route exact path="/historicos" component={RecordsScreen} />
             <Route exact path="/apartos" component={ApartScreen} />
-            <Redirect to="/inventario-vigente" />
+            <Redirect to="/inventario-vigente/:page?" />
           </Switch>
         </div>
       </main>
