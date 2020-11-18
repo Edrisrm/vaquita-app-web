@@ -4,9 +4,11 @@ const initialState = {
   inventory: [],
   currentInventory: null,
   loading: false,
+  count: 0,
 };
 
 export const inventoryReducer = (state = initialState, action) => {
+
   switch (action.type) {
     case types.ADD_NEW_INVENTORY:
       return {
@@ -23,9 +25,14 @@ export const inventoryReducer = (state = initialState, action) => {
     case types.INVENTORY_LOADED:
       return {
         ...state,
-        inventory: [...action.payload],
+        inventory: [...action.payload.data],
+        count: action.payload.count
       };
-
+    case types.INVENTORY_COUNT:
+      return{
+        ...state,
+        count: action.payload
+      }
     case types.ADD_INVENTORY_ERROR:
       return {
         ...state,

@@ -3,17 +3,19 @@ import { fetchConsult } from "../helpers/fetchService";
 import swal from "sweetalert2";
 import moment from "moment";
 
-export const recordsStartLoading = () =>{
+export const recordsStartLoading = (page_) =>{
     return async (dispatch) =>{
         try {
-            const resp = await fetchConsult("historicos");
+            const resp = await fetchConsult(`historicos/${page_}`);
             const body = await resp.json();
+            console.log(body);
             if (body.status === "success") {
-                const records = body.records.map((e) => ({
-                  ...e,
+                const records = body.data;
+                // const records = body.records.map((e) => ({
+                //   ...e,
         
-                  date: moment(e.date).toDate(),
-                }));
+                //   date: moment(e.date).toDate(),
+                // }));
                 dispatch(recordsLoaded(records));
 
             }else {

@@ -160,7 +160,9 @@ export const InventoryModal = () => {
             </div>
             <div className="row">
               <button type="submit" className="btn teal darken-4 center-alings">
-                Agregar
+              {currentInventory
+            ? "Editar"
+            : "Agregar"}{" "}
               </button>
             </div>
             {loading ? <Spinner /> : null}
