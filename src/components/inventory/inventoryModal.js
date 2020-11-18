@@ -159,8 +159,10 @@ export const InventoryModal = () => {
               <input className="col s6" type="file" name="image" />
             </div>
             <div className="row">
-              <button type="submit" className="btn btn-success center-alings">
-                Agregar
+              <button type="submit" className="btn teal darken-4 center-alings">
+              {currentInventory
+            ? "Editar"
+            : "Agregar"}{" "}
               </button>
             </div>
             {loading ? <Spinner /> : null}

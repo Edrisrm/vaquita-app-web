@@ -26,18 +26,17 @@ export function storeInventory(inventory) {
   };
 }
 
-export const inventoryStartLoading = () => {
+export const inventoryStartLoading = (page_) => {
   return async (dispatch) => {
     try {
-      const resp = await fetchConsult("inventario-en-finca");
+     
+
+      const resp = await fetchConsult(`inventario-en-finca/${page_}`);
+
       const body = await resp.json();
-
+      console.log(body)
       if (body.status === "success") {
-        const inventory = body.inventory.map((e) => ({
-          ...e,
-
-          date: moment(e.date).toDate(),
-        }));
+        const inventory = body.data;
 
         dispatch(inventoryLoaded(inventory));
       } else {
@@ -49,6 +48,31 @@ export const inventoryStartLoading = () => {
   };
 };
 
+export const deleteOneInventory = (id) =>{
+  return async (dispatch, getState) =>{
+    console.log(getState().currentApart);
+    try {
+      const resp = await fetchConsult('borrar-inventario',{id:id},"DELETE" );
+      const body = await resp.json();
+
+      if (body.status === "success") {
+          dispatch(deleteOneInventorySuccess());
+          swal.fire(
+              'Eliminado',
+              'El invetario se eliminó correctamente',
+              'success'
+          )
+      }
+  } catch (error) {
+      console.log(error);
+  }
+  }
+};
+//delete
+export const deleteOneInventorySuccess =() =>({
+  type: types.INVENTORY_DELETED,
+})
+//active-clear
 export const inventorySetActive = (inventory) => ({
   type: types.INVENTORY_SET_ACTIVE,
   payload: inventory,
@@ -57,7 +81,7 @@ export const inventorySetActive = (inventory) => ({
 export const inventoryClearActive = () => ({
   type: types.INVENTORY_CLEAR_ACTIVE,
 });
-
+//store
 const addNewInventory = () => ({
   type: types.ADD_NEW_INVENTORY,
   payload: true,
@@ -66,7 +90,7 @@ const addInventorySuccess = (inventory) => ({
   type: types.ADD_INVENTORY_SUCCESS,
   payload: inventory,
 });
-
+//get
 const inventoryLoaded = (inventory) => ({
   type: types.INVENTORY_LOADED,
   payload: inventory,
