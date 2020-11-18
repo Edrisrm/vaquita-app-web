@@ -35,7 +35,7 @@ export const InventoryScreen = () => {
     swal
       .fire({
         title: "¿Estas seguro?",
-        text: "Un inventario que se elimina no se puede recuperar",
+        text: "El inventario no se volerá a recuperar",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
