@@ -28,11 +28,6 @@ export const inventoryReducer = (state = initialState, action) => {
         inventory: [...action.payload.data],
         count: action.payload.count
       };
-    case types.INVENTORY_COUNT:
-      return{
-        ...state,
-        count: action.payload
-      }
     case types.ADD_INVENTORY_ERROR:
       return {
         ...state,
