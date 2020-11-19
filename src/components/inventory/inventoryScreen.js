@@ -15,8 +15,6 @@ import {
 
 import moment from "moment";
 
-moment.locale("es");
-
 export const InventoryScreen = () => {
   const dispatch = useDispatch();
 
@@ -45,11 +43,13 @@ export const InventoryScreen = () => {
       })
       .then((result) => {
         if (result.value) {
-          // pasarlo al action
           dispatch(deleteOneInventory(id));
+        }else{
+          dispatch(inventoryClearActive());
         }
       });
   };
+  
   const addInventory = () => {
     openModal();
   };
@@ -64,6 +64,7 @@ export const InventoryScreen = () => {
   useEffect(() => {
     FetchData(1);
   }, []);
+
   const [value, setValue] = useState("");
   const handleChange = (e) => {
     const { value } = e.target;
@@ -115,8 +116,8 @@ export const InventoryScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {results.map((item, index) => (
-                <tr key={index}>
+              {results.map((item) => (
+                <tr key={item._id}>
                   <th>{item.animal_number}</th>
                   <th>{item.image}</th>
                   <th>{item.breed}</th>
@@ -149,6 +150,8 @@ export const InventoryScreen = () => {
           pageCount={Math.ceil(count / 10)}
           pageRangeDisplayed={2}
           marginPagesDisplayed={1}
+          previousLabel={'Atras'}
+          nextLabel={'Adelante'}
           onPageChange={(data) => FetchData(data.selected + 1)}
           containerClassName={"pagination center-aling"}
         />

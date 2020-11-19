@@ -1,14 +1,18 @@
 import React, { useEffect } from "react";
 import M from "materialize-css";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { startLogout } from "../../actions/authAction";
 
+import "../../assets/css/sidebarStyle.css";
+
 export const Sidebar = () => {
+  const { id, picture, given_name } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
-  const handleLogin = (e) => {
+  const handleLogout = (e) => {
     e.preventDefault();
-    dispatch(startLogout());
+    dispatch(startLogout(id));
   };
 
   useEffect(() => {
@@ -28,11 +32,27 @@ export const Sidebar = () => {
           </a>
           <ul id="nav-mobile" className="right">
             <li>
-              <Link to="/">Home</Link>
+              <img
+              id="imgGoogle"
+                src={picture}
+                alt=""
+                width="45px"
+                className="circle responsive-img"
+              />
             </li>
 
             <li>
-              <Link className="navbar-brand" onClick={handleLogin} to="/acceso">
+              <a href="#name">
+                <span className="white-text name">{`${given_name}`}</span>
+              </a>
+            </li>
+
+            <li>
+              <Link
+                className="navbar-brand"
+                onClick={handleLogout}
+                to="/acceso"
+              >
                 Cerrar Sesion
               </Link>
             </li>
@@ -42,24 +62,19 @@ export const Sidebar = () => {
 
       <ul id="slide-out" className="sidenav light-green">
         <li>
-          <div className="user-view">
-            <div className="background"></div>
-            <a href="#name">
-              <span className="white-text name">John Doe</span>
-            </a>
-            <a href="#email">
-              <span className="white-text email">jdandturk@gmail.com</span>
-            </a>
-          </div>
+          <Link className="white-text" to="/inventarios-vigentes">
+            Inventario Vigente
+          </Link>
         </li>
         <li>
-          <Link to="/inventarios-vigentes">Inventario Vigente</Link>
+          <Link className="white-text" to="/apartos">
+            Apartos
+          </Link>
         </li>
         <li>
-          <Link to="/apartos">Apartos</Link>
-        </li>
-        <li>
-          <Link to="/historicos">Históricos</Link>
+          <Link className="white-text" to="/historicos">
+            Históricos
+          </Link>
         </li>
       </ul>
     </div>

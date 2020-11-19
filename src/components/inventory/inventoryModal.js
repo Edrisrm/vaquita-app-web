@@ -73,7 +73,6 @@ export const InventoryModal = () => {
     } else {
       dispatch(storeInventory(formValues));
     }
-
     closeModal();
   };
 
@@ -160,9 +159,7 @@ export const InventoryModal = () => {
             </div>
             <div className="row">
               <button type="submit" className="btn teal darken-4 center-alings">
-              {currentInventory
-            ? "Editar"
-            : "Agregar"}{" "}
+                {currentInventory ? "Editar" : "Agregar"}{" "}
               </button>
             </div>
             {loading ? <Spinner /> : null}
