@@ -5,6 +5,7 @@ import swal from "sweetalert2";
 
 export function storeApart(apart) {
   return async (dispatch) => {
+
     const resp = await fetchConsult("agregar-apartado", apart, "POST");
     const body = await resp.json();
     dispatch(addNewApart());
