@@ -61,6 +61,23 @@ export const Sidebar = () => {
       </nav>
 
       <ul id="slide-out" className="sidenav light-green">
+      <li>
+      <div className="user-view">
+        <div className="background">
+          <div className="center-aling">
+          <img id="imgGoogle"
+                src={picture}
+                alt=""
+                width="300px"
+                />
+          </div>
+        </div>
+        <br></br>
+        <br></br>
+        <br></br>
+        <p><span className="white-text name">{`${given_name}`}</span></p>
+      </div>
+    </li>
         <li>
           <Link className="white-text" to="/inventarios-vigentes">
             Inventario Vigente

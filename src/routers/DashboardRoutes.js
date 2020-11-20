@@ -8,7 +8,7 @@ import {
 import "materialize-css/dist/css/materialize.min.css";
 import { InventoryScreen } from "../components/inventory/inventoryScreen";
 import { RecordsScreen } from "../components/records/recordsScreen";
-import { ApartScreen } from "../components/apartos/ApartScreen";
+import { ApartScreen } from "../components/apart/ApartScreen";
 import { Sidebar } from "../components/ui/Sidebar";
 
 export const DashboardRoutes = () => {
