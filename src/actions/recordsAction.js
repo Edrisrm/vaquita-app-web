@@ -1,32 +1,24 @@
 import { types } from "../types/types";
 import { fetchConsult } from "../helpers/fetchService";
 import swal from "sweetalert2";
-import moment from "moment";
 
-export const recordsStartLoading = (page_) =>{
-    return async (dispatch) =>{
-        try {
-            const resp = await fetchConsult(`historicos/${page_}`);
-            const body = await resp.json();
-            console.log(body);
-            if (body.status === "success") {
-                const records = body.data;
-                // const records = body.records.map((e) => ({
-                //   ...e,
-        
-                //   date: moment(e.date).toDate(),
-                // }));
-                dispatch(recordsLoaded(records));
-
-            }else {
-                swal.fire("Error", body.msg, "error");
-            }    
-        } catch (error) {
-            console.log(error);
-        }
+// en store, update, delete, delete bulk, update bulk poner esto despues del "success"  dispatch(recordsStartLoading(page));     dispatch(apartClearActive());
+export const recordsStartLoading = (page_) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchConsult(`historicos/${page_}`, null);
+      const body = await resp.json();
+      if (body.status === "success") {
+        dispatch(recordsLoaded(body.data));
+      } else {
+        swal.fire("Error", body.msg, "error");
+      }
+    } catch (error) {
+      console.log(error);
     }
-}
-export const recordsLoaded = (records) =>({
-    type: types.RECORDS_LOADED,
-    payload: records
-})
+  };
+};
+export const recordsLoaded = (records) => ({
+  type: types.RECORDS_LOADED,
+  payload: records,
+});

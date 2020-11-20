@@ -66,9 +66,12 @@ export const twoFactor = (id, temp_token) => {
       dispatch(
         login({
           id: body.user.id,
+          email: body.user.email,
           given_name: body.user.given_name,
+          family_name: body.user.family_name,
           two_factors_activated: body.user.two_factors_activated,
           role: body.user.role,
+          picture: body.user.picture,
         })
       );
 
@@ -99,7 +102,10 @@ export const startChecking = () => {
         login({
           id: body.user.id,
           given_name: body.user.given_name,
+          family_name: body.user.family_name,
           two_factors_activated: body.user.two_factors_activated,
+          role: body.user.role,
+          picture: body.user.picture,
         })
       );
     } else {
@@ -108,9 +114,9 @@ export const startChecking = () => {
   };
 };
 
-export const startLogout = () => {
+export const startLogout = (id) => {
   return async (dispatch) => {
-    const resp = await fetchConsult("auth/logout");
+    const resp = await fetchConsult("auth/logout",{id: id}, 'POST');
     const body = await resp.json();
 
     localStorage.clear();
