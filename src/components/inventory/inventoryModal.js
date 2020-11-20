@@ -7,6 +7,7 @@ import { customModal } from "../../helpers/customModal";
 import {
   inventoryClearActive,
   storeInventory,
+  editOneInventory,
 } from "../../actions/inventoryAction";
 
 import Spinner from "../ui/Spinner";
@@ -72,7 +73,7 @@ export const InventoryModal = () => {
     }
 
     if (currentInventory) {
-      console.log("actualizacion");
+      dispatch(editOneInventory(formValues));
     } else {
       dispatch(storeInventory(formValues));
     }
@@ -104,9 +105,8 @@ export const InventoryModal = () => {
             <div className="row">
               <div className=" col s6">
                 <i className="fas fa-paw prefix"></i>
-                {currentInventory ? (
                   <input
-                    disabled
+                    disabled={currentInventory}
                     id="icon_prefix"
                     type="text"
                     className="validate"
@@ -114,17 +114,7 @@ export const InventoryModal = () => {
                     value={breed}
                     onChange={handleInputChange}
                   />
-                ) : (
-                  <input
-                    id="icon_prefix"
-                    type="text"
-                    className="validate"
-                    name="breed"
-                    value={breed}
-                    onChange={handleInputChange}
-                  />
-                )}
-
+                  
                 <label htmlFor="icon_prefix">Raza</label>
               </div>
 

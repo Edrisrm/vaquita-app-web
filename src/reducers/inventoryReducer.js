@@ -28,7 +28,12 @@ export const inventoryReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
-
+      case types.INVENTORY_UPDATE_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
     case types.INVENTORY_SET_ACTIVE:
       return {
         ...state,
