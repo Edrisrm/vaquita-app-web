@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uiCloseModal } from "../../actions/uiAction";
@@ -11,12 +10,13 @@ import {
 } from "../../actions/inventoryAction";
 
 import Spinner from "../ui/Spinner";
+import { apartStartLoading } from "../../actions/apartAction";
 
 const initEvent = {
   breed: "",
   weight: "",
   age_in_months: "",
-  division: "",
+  apartValue: "",
 };
 
 Modal.setAppElement("#root");
@@ -26,21 +26,24 @@ export const InventoryModal = () => {
 
   const { currentInventory } = useSelector((state) => state.inventory);
 
+  const { apart } = useSelector((state) => state.apart);
+
   const [formValues, setFormValues] = useState(initEvent);
 
-  const { breed, weight, age_in_months, division } = formValues;
+  const { breed, weight, age_in_months, apartValue } = formValues;
 
   const loading = useSelector((state) => state.inventory.loading);
   const error = useSelector((state) => state.inventory.error);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(apartStartLoading());
     if (currentInventory) {
       setFormValues(currentInventory);
     } else {
       setFormValues(initEvent);
     }
-  }, [currentInventory, setFormValues]);
+  }, [currentInventory, setFormValues, dispatch]);
 
   const closeModal = () => {
     dispatch(uiCloseModal());
@@ -62,7 +65,7 @@ export const InventoryModal = () => {
       breed.trim() === "" ||
       weight <= 0 ||
       age_in_months.trim() === "" ||
-      division.trim() === ""
+      !apartValue
     ) {
       Swal.fire("ERROR", "Faltan datos", "error");
       return;
@@ -73,7 +76,6 @@ export const InventoryModal = () => {
     } else {
       dispatch(storeInventory(formValues));
     }
-
     closeModal();
   };
 
@@ -102,14 +104,27 @@ export const InventoryModal = () => {
             <div className="row">
               <div className=" col s6">
                 <i className="fas fa-paw prefix"></i>
-                <input
-                  id="icon_prefix"
-                  type="text"
-                  className="validate"
-                  name="breed"
-                  value={breed}
-                  onChange={handleInputChange}
-                />
+                {currentInventory ? (
+                  <input
+                    disabled
+                    id="icon_prefix"
+                    type="text"
+                    className="validate"
+                    name="breed"
+                    value={breed}
+                    onChange={handleInputChange}
+                  />
+                ) : (
+                  <input
+                    id="icon_prefix"
+                    type="text"
+                    className="validate"
+                    name="breed"
+                    value={breed}
+                    onChange={handleInputChange}
+                  />
+                )}
+
                 <label htmlFor="icon_prefix">Raza</label>
               </div>
 
@@ -141,17 +156,24 @@ export const InventoryModal = () => {
                 <label htmlFor="icon_prefix">Edad en meses</label>
               </div>
 
+              <i className="fas fa-hat-cowboy-side prefix"></i>
               <div className=" col s6">
-                <i className="fas fa-hat-cowboy-side prefix"></i>
-                <input
-                  id="icon_prefix"
-                  type="text"
-                  className="validate"
-                  name="division"
-                  value={division}
+                <select
+                  value={apartValue}
                   onChange={handleInputChange}
-                />
-                <label htmlFor="division">Potrero</label>
+                  name="apartValue"
+                  className="browser-default custom-select"
+                >
+                  <option value={null}>
+                    Elegir
+                  </option>
+                  {apart.map((item) => (
+                    <option key={item._id} value={item._id}>
+                      {item.apart_number}
+                    </option>
+                  ))}
+                </select>
+                <label htmlFor="apartValue">Potrero</label>
               </div>
             </div>
 
@@ -160,9 +182,7 @@ export const InventoryModal = () => {
             </div>
             <div className="row">
               <button type="submit" className="btn teal darken-4 center-alings">
-              {currentInventory
-            ? "Editar"
-            : "Agregar"}{" "}
+                {currentInventory ? "Editar" : "Agregar"}{" "}
               </button>
             </div>
             {loading ? <Spinner /> : null}
