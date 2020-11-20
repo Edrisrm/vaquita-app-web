@@ -27,7 +27,30 @@ export function storeInventory(inventory) {
     }
   };
 }
+export function editOneInventory(inventory) {
+  return async (dispatch) =>{
+    const resp = await fetchConsult("editar-inventario", inventory, "PUT");
+    const body = await resp.json();
 
+    if (body.status === "success") {
+      dispatch(editInventorySuccess(body.inventory));
+      swal.fire({
+        icon: "success",
+        title: body.msg,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      dispatch(inventoryStartLoading());
+      dispatch(inventoryClearActive());
+      dispatch(uiCloseModal());
+      
+    }else{
+      dispatch(editInventoryError(true));
+      swal.fire("Error", body.msg, "error");
+
+    }
+  }
+}
 export const inventoryStartLoading = (page_) => {
   return async (dispatch) => {
     try {
@@ -70,6 +93,14 @@ export const deleteOneInventory = (id) => {
     }
   };
 };
+export const editInventorySuccess = (inventory) => ({
+  type: types.INVENTORY_UPDATED,
+  payload: inventory,
+})
+export const editInventoryError = (state) => ({
+  type: types.INVENTORY_UPDATE_ERROR,
+  payload: state
+})
 export const deleteOneInventorySuccess = () => ({
   type: types.INVENTORY_DELETED,
 });
