@@ -8,7 +8,6 @@ export const recordsStartLoading = (page_) => {
     try {
       const resp = await fetchConsult(`historicos/${page_}`, null);
       const body = await resp.json();
-      console.log(body);
       if (body.status === "success") {
         dispatch(recordsLoaded(body.data));
       } else {

@@ -52,7 +52,7 @@ export const RecordsScreen = () => {
         value={value}
         data={records}
         renderResults={(results) => (
-          <table className=" striped highlight indigo lighten-4">
+          <table className="responsive-table striped highlight indigo lighten-4">
             <thead>
               <tr>
                 <th>Nº de animal</th>

@@ -66,7 +66,7 @@ export const ApartScreen = () => {
       <br></br>
       <br></br>
       <hr></hr>
-      <table className=" striped highlight indigo lighten-4">
+      <table className="responsive-table striped highlight indigo lighten-4">
         <thead>
           <tr>
             <th>Metros cuadrados</th>
