@@ -2,10 +2,11 @@ import { types } from "../types/types";
 import { fetchConsult } from "../helpers/fetchService";
 import swal from "sweetalert2";
 
+// en store, update, delete, delete bulk, update bulk poner esto despues del "success"  dispatch(recordsStartLoading(page));     dispatch(apartClearActive());
 export const recordsStartLoading = (page_) => {
   return async (dispatch) => {
     try {
-      const resp = await fetchConsult(`historicos/${page_}`);
+      const resp = await fetchConsult(`historicos/${page_}`, null);
       const body = await resp.json();
       console.log(body);
       if (body.status === "success") {

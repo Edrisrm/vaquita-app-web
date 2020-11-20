@@ -17,6 +17,7 @@ export const ApartScreen = () => {
   const dispatch = useDispatch();
 
   const { apart } = useSelector((state) => state.apart);
+  const { role } = useSelector((state) => state.auth);
 
   const addApart = () => {
     openModal();
@@ -57,7 +58,7 @@ export const ApartScreen = () => {
       <div>
         <h4 className="center-align">Apartos de la finca</h4>
       </div>
-      <div className="center-align">
+      <div hidden={role === "ROLE_VIEWER"} className="center-align">
         <button onClick={addApart} className="btn teal darken-2">
           <i className="material-icons right">cloud</i>Agregar Aparto
         </button>
@@ -70,7 +71,7 @@ export const ApartScreen = () => {
           <tr>
             <th>Metros cuadrados</th>
             <th>Número de aparto</th>
-            <th>Acciones</th>
+            <th hidden={role === "ROLE_VIEWER"} >Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -78,7 +79,7 @@ export const ApartScreen = () => {
             <tr key={index}>
               <th>{item.square_meter}m²</th>
               <th>{item.apart_number}</th>
-              <th>
+              <th hidden={role === "ROLE_VIEWER"}>
                 <button
                   className="btn red accent-3"
                   onClick={() => onSelectApartOneDelete(item)}

@@ -9,10 +9,7 @@ import SearchResults from "react-filter-search";
 export const RecordsScreen = () => {
   const dispatch = useDispatch();
 
-  const { records } = useSelector((state) => state.records);
-
-  const { count } = useSelector((state) => state.records);
-
+  const { records, count } = useSelector((state) => state.records);
   const [value, setValue] = useState("");
 
   const handleChange = (e) => {
@@ -20,12 +17,12 @@ export const RecordsScreen = () => {
     setValue(value);
   };
 
-  const FetchData = (page = 1) => {
-    dispatch(recordsStartLoading(page));
-  };
-  useEffect(() => {
-    FetchData(1);
-  }, []);
+  useEffect(
+    (page) => {
+      dispatch(recordsStartLoading(page));
+    },
+    [dispatch]
+  );
 
   return (
     <div>
@@ -55,7 +52,7 @@ export const RecordsScreen = () => {
         value={value}
         data={records}
         renderResults={(results) => (
-          <table className="responsive-table striped highlight indigo lighten-4">
+          <table className=" striped highlight indigo lighten-4">
             <thead>
               <tr>
                 <th>Nº de animal</th>
@@ -88,7 +85,9 @@ export const RecordsScreen = () => {
           marginPagesDisplayed={1}
           previousLabel={"Atras"}
           nextLabel={"Adelante"}
-          onPageChange={(data) => FetchData(data.selected + 1)}
+          onPageChange={(data) =>
+            dispatch(recordsStartLoading(data.selected + 1))
+          }
           containerClassName={"pagination center-aling"}
         />
       </div>

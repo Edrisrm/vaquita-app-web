@@ -52,7 +52,12 @@ export const ApartModal = () => {
       Swal.fire("ERROR", "Faltan datos", "error");
       return;
     }
-    dispatch(storeApart(formValues));
+
+    if (currentApart) {
+      console.log("actualizacion");
+    } else {
+      dispatch(storeApart(formValues));
+    }
     closeModal();
   };
   return (

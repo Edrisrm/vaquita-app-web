@@ -66,6 +66,7 @@ export const twoFactor = (id, temp_token) => {
       dispatch(
         login({
           id: body.user.id,
+          email: body.user.email,
           given_name: body.user.given_name,
           family_name: body.user.family_name,
           two_factors_activated: body.user.two_factors_activated,

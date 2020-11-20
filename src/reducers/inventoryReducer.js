@@ -15,13 +15,7 @@ export const inventoryReducer = (state = initialState, action) => {
         ...state,
         loading: action.payload,
       };
-
-    case types.ADD_INVENTORY_SUCCESS:
-      return {
-        ...state,
-        inventory: [...state.inventory, action.payload],
-      };
-
+      
     case types.INVENTORY_LOADED:
       return {
         ...state,

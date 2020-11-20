@@ -1,5 +1,6 @@
 import { types } from "../types/types";
 import { fetchConsult } from "../helpers/fetchService";
+import { uiCloseModal } from "./uiAction";
 
 import swal from "sweetalert2";
 
@@ -17,6 +18,9 @@ export function storeInventory(inventory) {
         showConfirmButton: false,
         timer: 2000,
       });
+      dispatch(inventoryStartLoading());
+      dispatch(inventoryClearActive());
+      dispatch(uiCloseModal());
     } else {
       dispatch(addInventoryError(true));
       swal.fire("Error", body.msg, "error");
@@ -27,7 +31,7 @@ export function storeInventory(inventory) {
 export const inventoryStartLoading = (page_) => {
   return async (dispatch) => {
     try {
-      const resp = await fetchConsult(`inventario-en-finca/${page_}`);
+      const resp = await fetchConsult(`inventario-en-finca/${page_}`, null);
 
       const body = await resp.json();
       if (body.status === "success") {
@@ -56,6 +60,10 @@ export const deleteOneInventory = (id) => {
       if (body.status === "success") {
         dispatch(deleteOneInventorySuccess());
         swal.fire("Eliminado", body.msg, "success");
+
+        dispatch(inventoryStartLoading());
+      }else{
+        swal.fire("Error", body.msg, "error");
       }
     } catch (error) {
       console.log(error);
@@ -76,9 +84,8 @@ const addNewInventory = () => ({
   type: types.ADD_NEW_INVENTORY,
   payload: true,
 });
-const addInventorySuccess = (inventory) => ({
+const addInventorySuccess = () => ({
   type: types.ADD_INVENTORY_SUCCESS,
-  payload: inventory,
 });
 const inventoryLoaded = (inventory) => ({
   type: types.INVENTORY_LOADED,

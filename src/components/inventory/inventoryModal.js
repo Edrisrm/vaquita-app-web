@@ -101,25 +101,27 @@ export const InventoryModal = () => {
             <div className="row">
               <div className=" col s6">
                 <i className="fas fa-paw prefix"></i>
-                { currentInventory ? <input disabled
-                  id="icon_prefix"
-                  type="text"
-                  className="validate"
-                  name="breed"
-                  value={breed}
-                  onChange={handleInputChange}
-                />
-                :
-                <input
-                  id="icon_prefix"
-                  type="text"
-                  className="validate"
-                  name="breed"
-                  value={breed}
-                  onChange={handleInputChange}
-                />
-                }
-                
+                {currentInventory ? (
+                  <input
+                    disabled
+                    id="icon_prefix"
+                    type="text"
+                    className="validate"
+                    name="breed"
+                    value={breed}
+                    onChange={handleInputChange}
+                  />
+                ) : (
+                  <input
+                    id="icon_prefix"
+                    type="text"
+                    className="validate"
+                    name="breed"
+                    value={breed}
+                    onChange={handleInputChange}
+                  />
+                )}
+
                 <label htmlFor="icon_prefix">Raza</label>
               </div>
 
@@ -153,24 +155,16 @@ export const InventoryModal = () => {
 
               <div className=" col s6">
                 <i className="fas fa-hat-cowboy-side prefix"></i>
-                {currentInventory ?   <input disabled
+                <input
                   id="icon_prefix"
                   type="text"
+                  disabled={currentInventory}
                   className="validate"
                   name="division"
                   value={division}
                   onChange={handleInputChange}
-                />: 
-                  <input
-                  id="icon_prefix"
-                  type="text"
-                  className="validate"
-                  name="division"
-                  value={division}
-                  onChange={handleInputChange}
-                /> 
-                }
-              
+                />
+
                 <label htmlFor="division">Potrero</label>
               </div>
             </div>

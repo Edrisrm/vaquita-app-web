@@ -18,8 +18,9 @@ import moment from "moment";
 export const InventoryScreen = () => {
   const dispatch = useDispatch();
 
-  const { inventory } = useSelector((state) => state.inventory);
-  const { count } = useSelector((state) => state.inventory);
+  const { inventory, count } = useSelector((state) => state.inventory);
+
+  const { role } = useSelector((state) => state.auth);
 
   const onSelectInventory = (item) => {
     dispatch(inventorySetActive(item));
@@ -44,12 +45,12 @@ export const InventoryScreen = () => {
       .then((result) => {
         if (result.value) {
           dispatch(deleteOneInventory(id));
-        }else{
+        } else {
           dispatch(inventoryClearActive());
         }
       });
   };
-  
+
   const addInventory = () => {
     openModal();
   };
@@ -58,12 +59,12 @@ export const InventoryScreen = () => {
     dispatch(uiOpenModal());
   };
 
-  const FetchData = (page = 1) => {
-    dispatch(inventoryStartLoading(page));
-  };
-  useEffect(() => {
-    FetchData(1);
-  }, []);
+  useEffect(
+    (page) => {
+      dispatch(inventoryStartLoading(page));
+    },
+    [dispatch]
+  );
 
   const [value, setValue] = useState("");
   const handleChange = (e) => {
@@ -75,7 +76,7 @@ export const InventoryScreen = () => {
       <div>
         <h4 className="center-align">Inventario vigente del ganado</h4>
       </div>
-      <div className="center-align">
+      <div hidden={role === "ROLE_VIEWER"} className="center-align">
         <button onClick={addInventory} className="btn  teal darken-2">
           <i className="material-icons right">cloud</i>Agregar animal
         </button>
@@ -112,7 +113,7 @@ export const InventoryScreen = () => {
                 <th>Peso</th>
                 <th>Edad</th>
                 <th>Fecha de registro</th>
-                <th>Acciones</th>
+                <th hidden={role === "ROLE_VIEWER"}>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -124,7 +125,7 @@ export const InventoryScreen = () => {
                   <th>{item.weight}</th>
                   <th>{item.age_in_months}</th>
                   <th>{moment(item.id).format("MMM DD, YYYY HH:MM")}</th>
-                  <th>
+                  <th hidden={role === "ROLE_VIEWER"}>
                     <button
                       onClick={() => onSelectInventory(item)}
                       className="btn yellow darken-4"
@@ -150,9 +151,11 @@ export const InventoryScreen = () => {
           pageCount={Math.ceil(count / 2)}
           pageRangeDisplayed={2}
           marginPagesDisplayed={1}
-          previousLabel={'Atras'}
-          nextLabel={'Adelante'}
-          onPageChange={(data) => FetchData(data.selected + 1)}
+          previousLabel={"Atras"}
+          nextLabel={"Adelante"}
+          onPageChange={(data) =>
+            dispatch(inventoryStartLoading(data.selected + 1))
+          }
           containerClassName={"pagination center-aling"}
         />
       </div>
