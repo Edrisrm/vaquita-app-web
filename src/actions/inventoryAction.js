@@ -96,6 +96,27 @@ export const deleteOneInventory = (id) => {
   };
 };
 
+export const updateBulk = (data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchConsult(
+        "actualizar-estado",
+        { data: data },
+        "PUT"
+      );
+      const body = await resp.json();
+      if (body.status === "success") {
+        swal.fire("Actualizado", body.msg, "success");
+        dispatch(inventoryStartLoading());
+      } else {
+        swal.fire("Error", body.msg, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const uploadImage = (file0, inventoryId) => {
   return async (dispatch) => {
     try {
@@ -121,6 +142,27 @@ export const uploadImage = (file0, inventoryId) => {
     }
   };
 };
+
+export const addInNewInventory = (inventory) => {
+  return async (dispatch) => {
+    dispatch(addInNewInventoryAction(inventory));
+  };
+};
+
+export const deleteInNewInventory = () => {
+  return async (dispatch) => {
+    dispatch(deleteInNewInventoryAction());
+  };
+};
+
+export const addInNewInventoryAction = (inventory) => ({
+  type: types.UPDATE_DELETE_INVENTORY_ADDED,
+  payload: inventory,
+});
+
+export const deleteInNewInventoryAction = () => ({
+  type: types.UPDATE_DELETE_INVENTORY_DELETED,
+});
 
 export const editInventorySuccess = (inventory) => ({
   type: types.INVENTORY_UPDATED,

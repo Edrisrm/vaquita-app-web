@@ -2,25 +2,25 @@ import { types } from "../types/types";
 
 const initialState = {
   inventory: [],
+  updateDeleteManyInventory: [],
   currentInventory: null,
   loading: false,
   count: 0,
 };
 
 export const inventoryReducer = (state = initialState, action) => {
-
   switch (action.type) {
     case types.ADD_NEW_INVENTORY:
       return {
         ...state,
         loading: action.payload,
       };
-      
+
     case types.INVENTORY_LOADED:
       return {
         ...state,
         inventory: [...action.payload.data],
-        count: action.payload.count
+        count: action.payload.count,
       };
     case types.ADD_INVENTORY_ERROR:
       return {
@@ -28,7 +28,7 @@ export const inventoryReducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
-      case types.INVENTORY_UPDATE_ERROR:
+    case types.INVENTORY_UPDATE_ERROR:
       return {
         ...state,
         loading: false,
@@ -58,6 +58,24 @@ export const inventoryReducer = (state = initialState, action) => {
       return {
         ...state,
         inventory: state.inventory.filter(
+          (e) => e._id !== state.currentInventory._id
+        ),
+        currentInventory: null,
+      };
+
+    case types.UPDATE_DELETE_INVENTORY_ADDED:
+      return {
+        ...state,
+        updateDeleteManyInventory: [
+          ...state.updateDeleteManyInventory,
+          action.payload,
+        ],
+      };
+
+    case types.UPDATE_DELETE_INVENTORY_DELETED:
+      return {
+        ...state,
+        updateDeleteManyInventory: state.updateDeleteManyInventory.filter(
           (e) => e._id !== state.currentInventory._id
         ),
         currentInventory: null,

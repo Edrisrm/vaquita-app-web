@@ -11,6 +11,9 @@ import {
   inventoryStartLoading,
   deleteOneInventory,
   inventoryClearActive,
+  addInNewInventory,
+  deleteInNewInventory,
+  updateBulk,
 } from "../../actions/inventoryAction";
 
 import moment from "moment";
@@ -20,7 +23,9 @@ export const InventoryScreen = () => {
 
   const baseUrl = process.env.REACT_APP_API_URL;
 
-  const { inventory, count } = useSelector((state) => state.inventory);
+  const { inventory, count, updateDeleteManyInventory } = useSelector(
+    (state) => state.inventory
+  );
 
   const { role } = useSelector((state) => state.auth);
 
@@ -57,7 +62,7 @@ export const InventoryScreen = () => {
     openModal();
   };
 
-  const openModal = (e) => {
+  const openModal = () => {
     dispatch(uiOpenModal());
   };
 
@@ -74,11 +79,20 @@ export const InventoryScreen = () => {
     setValue(value);
   };
 
-
-
   const toggleCheckbox = (e, item) => {
-    console.log(e.target.checked); // si es true agrega, si es false elimina del array de objetos 
-    console.log(item);
+    if (e.target.checked) {
+      dispatch(addInNewInventory(item));
+    } else {
+      dispatch(inventorySetActive(item));
+      dispatch(deleteInNewInventory());
+    }
+  };
+  const updateInBulk = () => {
+    if (updateDeleteManyInventory.length > 0) {
+      dispatch(updateBulk(updateDeleteManyInventory));
+    } else {
+      console.log("primero dale check a algun registro");
+    }
   };
 
   return (
@@ -87,7 +101,7 @@ export const InventoryScreen = () => {
         <h4 className="center-align">Inventario vigente del ganado</h4>
       </div>
       <div hidden={role === "ROLE_VIEWER"} className="center-align">
-        <button onClick={addInventory} className="btn  teal darken-2">
+        <button onClick={addInventory} className="btn green darken-4">
           <i className="material-icons right">cloud</i>Agregar animal
         </button>
       </div>
@@ -110,12 +124,23 @@ export const InventoryScreen = () => {
         </div>
       </div>
       <br></br>
-      <div /*Si el array de datos nuevos tiene objetos entonces se muestra sino se oculta 'hidden={!arrayNuevo}'*/>
-      <button className="waves-effect waves-light btn">Eliminar animales</button>
-      <button className="waves-effect waves-light btn">Marcar como vendidos</button>
+      <div
+        hidden={
+          updateDeleteManyInventory.length === 0 &&
+          role === "ROLE_ADMINISTRATOR"
+        }
+      >
+        <button className="btn red accent-4">
+          <i className="material-icons right">delete</i> Eliminar animales
+        </button>
+
+        <button className="btn yellow darken-4" onClick={() => updateInBulk()}>
+          <i className="material-icons right">edit</i> Marcar como vendidos
+        </button>
       </div>
- 
-      
+
+      <br></br>
+
       <SearchResults
         value={value}
         data={inventory}
@@ -155,7 +180,7 @@ export const InventoryScreen = () => {
                           value={item._id}
                           onChange={(e) => toggleCheckbox(e, item)}
                         />
-                        <span className="black-text" >{item.animal_number}</span>
+                        <span className="black-text">{item.animal_number}</span>
                       </label>
                     </p>
                   </th>

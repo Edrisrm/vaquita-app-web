@@ -10,7 +10,6 @@ import {
   deleteApart,
   apartSetActive,
   apartClearActive,
-  //apartClearActive,
 } from "../../actions/apartAction";
 
 export const ApartScreen = () => {
@@ -59,7 +58,7 @@ export const ApartScreen = () => {
         <h4 className="center-align">Apartos de la finca</h4>
       </div>
       <div hidden={role === "ROLE_VIEWER"} className="center-align">
-        <button onClick={addApart} className="btn teal darken-2">
+        <button onClick={addApart} className="btn  green darken-4">
           <i className="material-icons right">cloud</i>Agregar Aparto
         </button>
       </div>
