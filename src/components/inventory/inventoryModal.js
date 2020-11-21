@@ -48,7 +48,7 @@ export const InventoryModal = () => {
     if (currentInventory) {
       setFormValues(currentInventory);
     } else {
-      setFormValues(initEvent);  
+      setFormValues(initEvent);
     }
   }, [currentInventory, setFormValues, dispatch]);
 
@@ -56,6 +56,7 @@ export const InventoryModal = () => {
     dispatch(uiCloseModal());
     dispatch(inventoryClearActive());
     setFormValues(initEvent);
+    setImageSrc(null);
   };
 
   const handleInputChange = ({ target }) => {
@@ -179,23 +180,24 @@ export const InventoryModal = () => {
                 <label htmlFor="apartValue">Potrero</label>
               </div>
             </div>
+            <ImageUpload
+              handleImageSelect={handleInputChange}
+              imageSrc={imageSrc}
+              setImageSrc={setImageSrc}
+              name="photo"
+              value={photo}
+              style={{
+                width: "100%",
+                height: 400,
+                background: "green",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            />
 
-            <div className="row">
-              <ImageUpload
-                handleImageSelect={handleInputChange}
-                imageSrc={imageSrc}
-                setImageSrc={setImageSrc}
-                name="photo"
-                value={photo}
-                style={{
-                  width: 305,
-                  height: 240,
-                  background: "green",
-                }}
-              />
+            <label htmlFor="imageSrc">Foto</label>
 
-              <label htmlFor="imageSrc">Foto</label>
-            </div>
             <br></br>
             <hr></hr>
             <div className="row">
