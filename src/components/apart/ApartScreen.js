@@ -10,19 +10,47 @@ import {
   deleteApart,
   apartSetActive,
   apartClearActive,
+  deleteBulk,
+  addInNewApart,
+  deleteInNewApart,
 } from "../../actions/apartAction";
 
 export const ApartScreen = () => {
   const dispatch = useDispatch();
 
-  const { apart } = useSelector((state) => state.apart);
+  const { apart, updateDeleteManyApart } = useSelector((state) => state.apart);
   const { role } = useSelector((state) => state.auth);
 
   const addApart = () => {
     openModal();
   };
 
-  const openModal = (e) => {
+  const deleteInBulk = () => {
+    swal
+      .fire({
+        title: "¿Estas seguro?",
+        text: "Estos registros no se volerán a recuperar",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, eliminar!!",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.value) {
+          if (updateDeleteManyApart.length > 0) {
+            dispatch(deleteBulk(updateDeleteManyApart));
+          } else {
+            console.log("primero dale check a algun registro");
+          }
+        } else {
+          dispatch(apartClearActive());
+        }
+      });
+  };
+
+  const openModal = () => {
     dispatch(uiOpenModal());
   };
   const deleteOneApart = (id) => {
@@ -49,6 +77,16 @@ export const ApartScreen = () => {
     dispatch(apartSetActive(item));
     deleteOneApart(item);
   };
+
+  const toggleCheckbox = (e, item) => {
+    if (e.target.checked) {
+      dispatch(addInNewApart(item));
+    } else {
+      dispatch(apartSetActive(item));
+      dispatch(deleteInNewApart());
+    }
+  };
+
   useEffect(() => {
     dispatch(apartStartLoading());
   }, [dispatch]);
@@ -64,19 +102,42 @@ export const ApartScreen = () => {
       </div>
       <br></br>
       <br></br>
+      <div
+        hidden={updateDeleteManyApart.length === 0 || role === "ROLE_VIEWER"}
+      >
+        <button className="btn red accent-4" onClick={() => deleteInBulk()}>
+          <i className="material-icons right">delete</i> Eliminar apartos
+        </button>
+      </div>
+
+      <br></br>
       <hr></hr>
       <table className="responsive-table striped highlight indigo lighten-4">
         <thead>
           <tr>
             <th>Metros cuadrados</th>
             <th>Número de aparto</th>
-            <th hidden={role === "ROLE_VIEWER"} >Acciones</th>
+            <th hidden={role === "ROLE_VIEWER"}>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {apart.map((item, index) => (
             <tr key={index}>
-              <th>{item.square_meter}m²</th>
+              <th>
+                <p>
+                  <label hidden={role === "ROLE_VIEWER"} >
+                    <input
+                      type="checkbox"
+                      value={item._id}
+                      onChange={(e) => toggleCheckbox(e, item)}
+                    />
+                    <span className="black-text">{item.square_meter}m²</span>
+                  </label>
+                  <span hidden={role !== "ROLE_VIEWER"} className="black-text">
+                    {item.square_meter}m²
+                  </span>
+                </p>
+              </th>
               <th>{item.apart_number}</th>
               <th hidden={role === "ROLE_VIEWER"}>
                 <button

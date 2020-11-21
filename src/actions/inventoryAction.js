@@ -108,6 +108,29 @@ export const updateBulk = (data) => {
       if (body.status === "success") {
         swal.fire("Actualizado", body.msg, "success");
         dispatch(inventoryStartLoading());
+        dispatch(addNewInventoryClear());
+      } else {
+        swal.fire("Error", body.msg, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const deleteBulk = (data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchConsult(
+        "eliminar-registros",
+        { data: data },
+        "DELETE"
+      );
+      const body = await resp.json();
+      if (body.status === "success") {
+        swal.fire("Eliminados", body.msg, "success");
+        dispatch(inventoryStartLoading());
+        dispatch(addNewInventoryClear());
       } else {
         swal.fire("Error", body.msg, "error");
       }
@@ -192,6 +215,10 @@ const addInventorySuccess = () => ({
 
 const uploadImageInventorySuccess = () => ({
   type: types.INVENTORY_IMAGE_UPLOADED,
+});
+
+const addNewInventoryClear = () => ({
+  type: types.UPDATE_DELETE_INVENTORY_CLEAR,
 });
 
 const uploadImageInventoryError = () => ({

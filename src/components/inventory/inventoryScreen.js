@@ -14,6 +14,7 @@ import {
   addInNewInventory,
   deleteInNewInventory,
   updateBulk,
+  deleteBulk,
 } from "../../actions/inventoryAction";
 
 import moment from "moment";
@@ -88,11 +89,53 @@ export const InventoryScreen = () => {
     }
   };
   const updateInBulk = () => {
-    if (updateDeleteManyInventory.length > 0) {
-      dispatch(updateBulk(updateDeleteManyInventory));
-    } else {
-      console.log("primero dale check a algun registro");
-    }
+    swal
+      .fire({
+        title: "¿Estas seguro?",
+        text: "Estos registros no se podran cambiar",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Actualizalos!!",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.value) {
+          if (updateDeleteManyInventory.length > 0) {
+            dispatch(updateBulk(updateDeleteManyInventory));
+          } else {
+            console.log("primero dale check a algun registro");
+          }
+        } else {
+          dispatch(inventoryClearActive());
+        }
+      });
+  };
+
+  const deleteInBulk = () => {
+    swal
+      .fire({
+        title: "¿Estas seguro?",
+        text: "Estos registros no se volerán a recuperar",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, eliminar!!",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.value) {
+          if (updateDeleteManyInventory.length > 0) {
+            dispatch(deleteBulk(updateDeleteManyInventory));
+          } else {
+            console.log("primero dale check a algun registro");
+          }
+        } else {
+          dispatch(inventoryClearActive());
+        }
+      });
   };
 
   return (
@@ -126,11 +169,10 @@ export const InventoryScreen = () => {
       <br></br>
       <div
         hidden={
-          updateDeleteManyInventory.length === 0 &&
-          role === "ROLE_ADMINISTRATOR"
+          updateDeleteManyInventory.length === 0 || role === "ROLE_VIEWER"
         }
       >
-        <button className="btn red accent-4">
+        <button className="btn red accent-4" onClick={() => deleteInBulk()}>
           <i className="material-icons right">delete</i> Eliminar animales
         </button>
 
@@ -176,6 +218,8 @@ export const InventoryScreen = () => {
                     <p>
                       <label>
                         <input
+                          hidden={role === "ROLE_VIEWER"}
+                          s
                           type="checkbox"
                           value={item._id}
                           onChange={(e) => toggleCheckbox(e, item)}

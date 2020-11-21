@@ -46,6 +46,12 @@ export const inventoryReducer = (state = initialState, action) => {
         currentInventory: null,
       };
 
+    case types.UPDATE_DELETE_INVENTORY_CLEAR:
+      return {
+        ...state,
+        updateDeleteManyInventory: [],
+      };
+
     case types.INVENTORY_UPDATED:
       return {
         ...state,
