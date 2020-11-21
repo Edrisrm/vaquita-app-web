@@ -45,6 +45,7 @@ export const apartReducer = (state = initialState, action) => {
       return {
         ...state,
         updateDeleteManyApart: [...state.updateDeleteManyApart, action.payload],
+        currentApart: null,
       };
 
     case types.UPDATE_DELETE_APART_DELETED:
