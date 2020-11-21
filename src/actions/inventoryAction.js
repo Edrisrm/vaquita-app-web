@@ -1,5 +1,5 @@
 import { types } from "../types/types";
-import { fetchConsult } from "../helpers/fetchService";
+import { fetchConsult, uploadImageInventory } from "../helpers/fetchService";
 import { uiCloseModal } from "./uiAction";
 
 import swal from "sweetalert2";
@@ -28,7 +28,7 @@ export function storeInventory(inventory) {
   };
 }
 export function editOneInventory(inventory) {
-  return async (dispatch) =>{
+  return async (dispatch) => {
     const resp = await fetchConsult("editar-inventario", inventory, "PUT");
     const body = await resp.json();
 
@@ -43,13 +43,11 @@ export function editOneInventory(inventory) {
       dispatch(inventoryStartLoading());
       dispatch(inventoryClearActive());
       dispatch(uiCloseModal());
-      
-    }else{
+    } else {
       dispatch(editInventoryError(true));
       swal.fire("Error", body.msg, "error");
-
     }
-  }
+  };
 }
 export const inventoryStartLoading = (page_) => {
   return async (dispatch) => {
@@ -85,7 +83,7 @@ export const deleteOneInventory = (id) => {
         swal.fire("Eliminado", body.msg, "success");
 
         dispatch(inventoryStartLoading());
-      }else{
+      } else {
         swal.fire("Error", body.msg, "error");
       }
     } catch (error) {
@@ -93,14 +91,44 @@ export const deleteOneInventory = (id) => {
     }
   };
 };
+
+export const uploadImage = (file0, inventoryId) => {
+  return async (dispatch) => {
+    try {
+      let formData = new FormData();
+
+      formData.append("file0", file0);
+
+      const resp = await uploadImageInventory(
+        `upload-inventory/${inventoryId}`,
+        formData
+      );
+      const body = await resp.json();
+
+      if (body.status === "success") {
+        dispatch(uploadImageInventorySuccess());
+
+        swal.fire("Arriba", body.msg, "success");
+
+        dispatch(inventoryStartLoading());
+      } else {
+        dispatch(uploadImageInventoryError());
+        swal.fire("Error", body.msg, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const editInventorySuccess = (inventory) => ({
   type: types.INVENTORY_UPDATED,
   payload: inventory,
-})
+});
 export const editInventoryError = (state) => ({
   type: types.INVENTORY_UPDATE_ERROR,
-  payload: state
-})
+  payload: state,
+});
 export const deleteOneInventorySuccess = () => ({
   type: types.INVENTORY_DELETED,
 });
@@ -117,6 +145,14 @@ const addNewInventory = () => ({
 });
 const addInventorySuccess = () => ({
   type: types.ADD_INVENTORY_SUCCESS,
+});
+
+const uploadImageInventorySuccess = () => ({
+  type: types.INVENTORY_IMAGE_UPLOADED,
+});
+
+const uploadImageInventoryError = () => ({
+  type: types.INVENTORY_IMAGE_UPLOAD_ERROR,
 });
 const inventoryLoaded = (inventory) => ({
   type: types.INVENTORY_LOADED,

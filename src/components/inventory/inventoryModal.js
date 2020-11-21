@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { uiCloseModal } from "../../actions/uiAction";
-import Swal from "sweetalert2";
-import Modal from "react-modal";
 import { customModal } from "../../helpers/customModal";
+import { apartStartLoading } from "../../actions/apartAction";
+
 import {
   inventoryClearActive,
   storeInventory,
   editOneInventory,
+  uploadImage,
 } from "../../actions/inventoryAction";
 
 import Spinner from "../ui/Spinner";
-import { apartStartLoading } from "../../actions/apartAction";
+import "image-upload-react/dist/index.css";
+
+import Swal from "sweetalert2";
+import Modal from "react-modal";
+import ImageUpload from "image-upload-react";
 
 const initEvent = {
   breed: "",
@@ -25,6 +30,8 @@ Modal.setAppElement("#root");
 export const InventoryModal = () => {
   const { modalOpen } = useSelector((state) => state.ui);
 
+  const [imageSrc, setImageSrc] = useState();
+
   const { currentInventory } = useSelector((state) => state.inventory);
 
   const { apart } = useSelector((state) => state.apart);
@@ -32,6 +39,11 @@ export const InventoryModal = () => {
   const [formValues, setFormValues] = useState(initEvent);
 
   const { breed, weight, age_in_months, apartValue } = formValues;
+
+  const handleImageSelect = (e) => {
+    setImageSrc(URL.createObjectURL(e.target.files[0]));
+    dispatch(uploadImage(e.target.files[0], currentInventory._id));
+  };
 
   const loading = useSelector((state) => state.inventory.loading);
   const error = useSelector((state) => state.inventory.error);
@@ -105,16 +117,16 @@ export const InventoryModal = () => {
             <div className="row">
               <div className=" col s6">
                 <i className="fas fa-paw prefix"></i>
-                  <input
-                    disabled={currentInventory}
-                    id="icon_prefix"
-                    type="text"
-                    className="validate"
-                    name="breed"
-                    value={breed}
-                    onChange={handleInputChange}
-                  />
-                  
+                <input
+                  disabled={currentInventory}
+                  id="icon_prefix"
+                  type="text"
+                  className="validate"
+                  name="breed"
+                  value={breed}
+                  onChange={handleInputChange}
+                />
+
                 <label htmlFor="icon_prefix">Raza</label>
               </div>
 
@@ -154,9 +166,7 @@ export const InventoryModal = () => {
                   name="apartValue"
                   className="browser-default custom-select"
                 >
-                  <option value={null}>
-                    Elegir
-                  </option>
+                  <option value={null}>Elegir</option>
                   {apart.map((item) => (
                     <option key={item._id} value={item._id}>
                       {item.apart_number}
@@ -167,9 +177,20 @@ export const InventoryModal = () => {
               </div>
             </div>
 
-            <div className="row">
-              <input className="col s6" type="file" name="image" />
+            <div className="row" hidden={!currentInventory}>
+              <ImageUpload
+                handleImageSelect={handleImageSelect}
+                imageSrc={imageSrc}
+                setImageSrc={setImageSrc}
+                style={{
+                  width: 305,
+                  height: 240,
+                  background: "green",
+                }}
+              />
+              <label htmlFor="imageSrc">Foto</label>
             </div>
+
             <div className="row">
               <button type="submit" className="btn teal darken-4 center-alings">
                 {currentInventory ? "Editar" : "Agregar"}{" "}
