@@ -73,6 +73,14 @@ export const InventoryScreen = () => {
     const { value } = e.target;
     setValue(value);
   };
+
+
+
+  const toggleCheckbox = (e, item) => {
+    console.log(e.target.checked); // si es true agrega, si es false elimina del array de objetos 
+    console.log(item);
+  };
+
   return (
     <div>
       <div>
@@ -102,6 +110,12 @@ export const InventoryScreen = () => {
         </div>
       </div>
       <br></br>
+      <div /*Si el array de datos nuevos tiene objetos entonces se muestra sino se oculta 'hidden={!arrayNuevo}'*/>
+      <button className="waves-effect waves-light btn">Eliminar animales</button>
+      <button className="waves-effect waves-light btn">Marcar como vendidos</button>
+      </div>
+ 
+      
       <SearchResults
         value={value}
         data={inventory}
@@ -133,7 +147,18 @@ export const InventoryScreen = () => {
                       width="200"
                     />
                   </th>
-                  <th>{item.animal_number}</th>
+                  <th>
+                    <p>
+                      <label>
+                        <input
+                          type="checkbox"
+                          value={item._id}
+                          onChange={(e) => toggleCheckbox(e, item)}
+                        />
+                        <span className="black-text" >{item.animal_number}</span>
+                      </label>
+                    </p>
+                  </th>
                   <th>{item.breed}</th>
                   <th>{item.weight}</th>
                   <th>{item.age_in_months}</th>
