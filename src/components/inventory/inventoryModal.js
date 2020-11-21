@@ -48,7 +48,7 @@ export const InventoryModal = () => {
     if (currentInventory) {
       setFormValues(currentInventory);
     } else {
-      setFormValues(initEvent);
+      setFormValues(initEvent);  
     }
   }, [currentInventory, setFormValues, dispatch]);
 
@@ -76,10 +76,11 @@ export const InventoryModal = () => {
   const handleSubmitForm = (e) => {
     e.preventDefault();
     if (
-      breed.trim() === "" ||
-      weight <= 0 ||
-      age_in_months.trim() === "" ||
-      !apartValue
+      !currentInventory &&
+      (breed.trim() === "" ||
+        weight <= 0 ||
+        age_in_months.trim() === "" ||
+        !apartValue)
     ) {
       Swal.fire("ERROR", "Faltan datos", "error");
       return;
@@ -162,7 +163,7 @@ export const InventoryModal = () => {
               <i className="fas fa-hat-cowboy-side prefix"></i>
               <div className=" col s6">
                 <select
-                 disabled={currentInventory}
+                  disabled={currentInventory}
                   value={apartValue}
                   onChange={handleInputChange}
                   name="apartValue"

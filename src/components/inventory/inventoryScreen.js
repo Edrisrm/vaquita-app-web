@@ -18,6 +18,8 @@ import moment from "moment";
 export const InventoryScreen = () => {
   const dispatch = useDispatch();
 
+  const baseUrl = process.env.REACT_APP_API_URL;
+
   const { inventory, count } = useSelector((state) => state.inventory);
 
   const { role } = useSelector((state) => state.auth);
@@ -107,8 +109,8 @@ export const InventoryScreen = () => {
           <table className="responsive-table striped highlight indigo lighten-4">
             <thead>
               <tr>
-                <th>Nº de animal</th>
                 <th>Foto</th>
+                <th>Nº de animal</th>
                 <th>Raza</th>
                 <th>Peso</th>
                 <th>Edad</th>
@@ -119,8 +121,19 @@ export const InventoryScreen = () => {
             <tbody>
               {results.map((item) => (
                 <tr key={item._id}>
+                  <th>
+                    <img
+                      alt=""
+                      src={
+                        item.image
+                          ? `${baseUrl}/inventory-file/${item.image}`
+                          : "https://becagrafic.com/wp-content/uploads/2019/09/imagen-no-disponible.jpg"
+                      }
+                      height="200"
+                      width="200"
+                    />
+                  </th>
                   <th>{item.animal_number}</th>
-                  <th>{item.image}</th>
                   <th>{item.breed}</th>
                   <th>{item.weight}</th>
                   <th>{item.age_in_months}</th>
