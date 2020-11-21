@@ -8,7 +8,6 @@ import {
   inventoryClearActive,
   storeInventory,
   editOneInventory,
-  uploadImage,
 } from "../../actions/inventoryAction";
 
 import Spinner from "../ui/Spinner";
@@ -23,8 +22,8 @@ const initEvent = {
   weight: "",
   age_in_months: "",
   apartValue: "",
+  photo: undefined,
 };
-
 Modal.setAppElement("#root");
 
 export const InventoryModal = () => {
@@ -38,12 +37,7 @@ export const InventoryModal = () => {
 
   const [formValues, setFormValues] = useState(initEvent);
 
-  const { breed, weight, age_in_months, apartValue } = formValues;
-
-  const handleImageSelect = (e) => {
-    setImageSrc(URL.createObjectURL(e.target.files[0]));
-    dispatch(uploadImage(e.target.files[0], currentInventory._id));
-  };
+  const { breed, weight, age_in_months, apartValue, photo } = formValues;
 
   const loading = useSelector((state) => state.inventory.loading);
   const error = useSelector((state) => state.inventory.error);
@@ -65,15 +59,22 @@ export const InventoryModal = () => {
   };
 
   const handleInputChange = ({ target }) => {
-    setFormValues({
-      ...formValues,
-      [target.name]: target.value,
-    });
+    if (target.files) {
+      setImageSrc(URL.createObjectURL(target.files[0]));
+      setFormValues({
+        ...formValues,
+        photo: target.files[0],
+      });
+    } else {
+      setFormValues({
+        ...formValues,
+        [target.name]: target.value,
+      });
+    }
   };
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-
     if (
       breed.trim() === "" ||
       weight <= 0 ||
@@ -161,6 +162,7 @@ export const InventoryModal = () => {
               <i className="fas fa-hat-cowboy-side prefix"></i>
               <div className=" col s6">
                 <select
+                 disabled={currentInventory}
                   value={apartValue}
                   onChange={handleInputChange}
                   name="apartValue"
@@ -177,20 +179,24 @@ export const InventoryModal = () => {
               </div>
             </div>
 
-            <div className="row" hidden={!currentInventory}>
+            <div className="row">
               <ImageUpload
-                handleImageSelect={handleImageSelect}
+                handleImageSelect={handleInputChange}
                 imageSrc={imageSrc}
                 setImageSrc={setImageSrc}
+                name="photo"
+                value={photo}
                 style={{
                   width: 305,
                   height: 240,
                   background: "green",
                 }}
               />
+
               <label htmlFor="imageSrc">Foto</label>
             </div>
-
+            <br></br>
+            <hr></hr>
             <div className="row">
               <button type="submit" className="btn teal darken-4 center-alings">
                 {currentInventory ? "Editar" : "Agregar"}{" "}

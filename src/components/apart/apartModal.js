@@ -104,6 +104,7 @@ export const ApartModal = () => {
             </div>
             <div className="divider"></div>
             <br></br>
+            <br></br>
             <div className="row">
               <div className="center-aling">
                 <button type="submit" className="btn teal darken-4">

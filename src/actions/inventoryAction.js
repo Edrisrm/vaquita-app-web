@@ -1,7 +1,5 @@
 import { types } from "../types/types";
 import { fetchConsult, uploadImageInventory } from "../helpers/fetchService";
-import { uiCloseModal } from "./uiAction";
-
 import swal from "sweetalert2";
 
 export function storeInventory(inventory) {
@@ -18,9 +16,12 @@ export function storeInventory(inventory) {
         showConfirmButton: false,
         timer: 2000,
       });
-      dispatch(inventoryStartLoading());
+      if (inventory.photo) {
+        dispatch(uploadImage(inventory.photo, body.inventory._id));
+      } else {
+        dispatch(inventoryStartLoading());
+      }
       dispatch(inventoryClearActive());
-      dispatch(uiCloseModal());
     } else {
       dispatch(addInventoryError(true));
       swal.fire("Error", body.msg, "error");
@@ -40,9 +41,12 @@ export function editOneInventory(inventory) {
         showConfirmButton: false,
         timer: 2000,
       });
-      dispatch(inventoryStartLoading());
+      if (inventory.photo) {
+        dispatch(uploadImage(inventory.photo, body.inventory._id));
+      } else {
+        dispatch(inventoryStartLoading());
+      }
       dispatch(inventoryClearActive());
-      dispatch(uiCloseModal());
     } else {
       dispatch(editInventoryError(true));
       swal.fire("Error", body.msg, "error");
@@ -107,9 +111,6 @@ export const uploadImage = (file0, inventoryId) => {
 
       if (body.status === "success") {
         dispatch(uploadImageInventorySuccess());
-
-        swal.fire("Arriba", body.msg, "success");
-
         dispatch(inventoryStartLoading());
       } else {
         dispatch(uploadImageInventoryError());
