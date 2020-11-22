@@ -17,8 +17,6 @@ import {
   deleteBulk,
 } from "../../actions/inventoryAction";
 
-import moment from "moment";
-
 export const InventoryScreen = () => {
   const dispatch = useDispatch();
 
@@ -117,7 +115,7 @@ export const InventoryScreen = () => {
     swal
       .fire({
         title: "¿Estas seguro?",
-        text: "Estos registros no se volerán a recuperar",
+        text: "Estos registros no se volerá a recuperar",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -169,7 +167,8 @@ export const InventoryScreen = () => {
       <br></br>
       <div
         hidden={
-          updateDeleteManyInventory.length === 0 || role === "ROLE_VIEWER"
+          updateDeleteManyInventory.length === 0 &&
+          role === "ROLE_ADMINISTRATOR"
         }
       >
         <button className="btn red accent-4" onClick={() => deleteInBulk()}>
@@ -218,8 +217,6 @@ export const InventoryScreen = () => {
                     <p>
                       <label>
                         <input
-                          hidden={role === "ROLE_VIEWER"}
-                          s
                           type="checkbox"
                           value={item._id}
                           onChange={(e) => toggleCheckbox(e, item)}
@@ -231,7 +228,7 @@ export const InventoryScreen = () => {
                   <th>{item.breed}</th>
                   <th>{item.weight}</th>
                   <th>{item.age_in_months}</th>
-                  <th>{moment(item.id).format("MMM DD, YYYY HH:MM")}</th>
+                  <th>{item.date}</th>
                   <th hidden={role === "ROLE_VIEWER"}>
                     <button
                       onClick={() => onSelectInventory(item)}

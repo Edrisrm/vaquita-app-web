@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { recordsStartLoading } from "../../actions/recordsAction";
-import moment from "moment";
 import ReactPaginate from "react-paginate";
 import SearchResults from "react-filter-search";
 
@@ -69,7 +68,7 @@ export const RecordsScreen = () => {
                   <th>{item.image}</th>
                   <th>{item.breed}</th>
                   <th>{item.weight}</th>
-                  <th>{moment(item.id).format("MMM DD, YYYY HH:MM")}</th>
+                  <th>{item.date}</th>
                 </tr>
               ))}
             </tbody>

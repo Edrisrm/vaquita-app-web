@@ -1,15 +1,15 @@
 import { types } from "../types/types";
 import { fetchConsult, uploadImageInventory } from "../helpers/fetchService";
 import swal from "sweetalert2";
+import moment from "moment";
 
 export function storeInventory(inventory) {
   return async (dispatch) => {
     const resp = await fetchConsult("agregar-inventario", inventory, "POST");
     const body = await resp.json();
     dispatch(addNewInventory());
-
     if (body.status === "success") {
-      dispatch(addInventorySuccess(body.inventory));
+      dispatch(addInventorySuccess());
       swal.fire({
         icon: "success",
         title: body.msg,
@@ -59,10 +59,11 @@ export const inventoryStartLoading = (page_) => {
       const resp = await fetchConsult(`inventario-en-finca/${page_}`, null);
 
       const body = await resp.json();
+      
       if (body.status === "success") {
-        const inventory = body.data;
 
-        dispatch(inventoryLoaded(inventory));
+
+        dispatch(inventoryLoaded(body.data));
       } else {
         swal.fire("Error", body.msg, "error");
       }
@@ -110,7 +111,7 @@ export const updateBulk = (data) => {
         dispatch(inventoryStartLoading());
         dispatch(addNewInventoryClear());
       } else {
-        swal.fire("Error", body.msg, "error");
+        swal.fire("Error", "Error al actualizar en masa", "error");
       }
     } catch (error) {
       console.log(error);
@@ -158,7 +159,7 @@ export const uploadImage = (file0, inventoryId) => {
         dispatch(inventoryStartLoading());
       } else {
         dispatch(uploadImageInventoryError());
-        swal.fire("Error", body.msg, "error");
+        swal.fire("Error", "No se pudo subir la imagen", "error");
       }
     } catch (error) {
       console.log(error);
