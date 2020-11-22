@@ -5,7 +5,6 @@ import swal from "sweetalert2";
 
 export function storeApart(apart) {
   return async (dispatch) => {
-
     const resp = await fetchConsult("agregar-apartado", apart, "POST");
     const body = await resp.json();
     dispatch(addNewApart());
@@ -55,6 +54,53 @@ export const deleteApart = (id) => {
     }
   };
 };
+
+export const deleteBulk = (data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchConsult(
+        "eliminar-apartos",
+        { data: data },
+        "DELETE"
+      );
+      const body = await resp.json();
+      if (body.status === "success") {
+        swal.fire("Eliminados", body.msg, "success");
+        dispatch(apartStartLoading());
+        dispatch(addNewApartClear());
+      } else {
+        swal.fire("Error", body.msg, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const addInNewApart = (apart) => {
+  return async (dispatch) => {
+    dispatch(addInNewApartAction(apart));
+  };
+};
+
+export const deleteInNewApart = () => {
+  return async (dispatch) => {
+    dispatch(deleteInNewApartAction());
+  };
+};
+
+export const addInNewApartAction = (inventory) => ({
+  type: types.UPDATE_DELETE_APART_ADDED,
+  payload: inventory,
+});
+
+export const deleteInNewApartAction = () => ({
+  type: types.UPDATE_DELETE_APART_DELETED,
+});
+
+const addNewApartClear = () => ({
+  type: types.UPDATE_DELETE_APART_CLEAR,
+});
 
 const deleteApartSuccess = () => ({
   type: types.APART_DELETE_SUCCESS,

@@ -1,15 +1,15 @@
 import { types } from "../types/types";
 import { fetchConsult, uploadImageInventory } from "../helpers/fetchService";
 import swal from "sweetalert2";
+import moment from "moment";
 
 export function storeInventory(inventory) {
   return async (dispatch) => {
     const resp = await fetchConsult("agregar-inventario", inventory, "POST");
     const body = await resp.json();
     dispatch(addNewInventory());
-
     if (body.status === "success") {
-      dispatch(addInventorySuccess(body.inventory));
+      dispatch(addInventorySuccess());
       swal.fire({
         icon: "success",
         title: body.msg,
@@ -59,10 +59,11 @@ export const inventoryStartLoading = (page_) => {
       const resp = await fetchConsult(`inventario-en-finca/${page_}`, null);
 
       const body = await resp.json();
+      
       if (body.status === "success") {
-        const inventory = body.data;
 
-        dispatch(inventoryLoaded(inventory));
+
+        dispatch(inventoryLoaded(body.data));
       } else {
         swal.fire("Error", body.msg, "error");
       }
@@ -96,6 +97,50 @@ export const deleteOneInventory = (id) => {
   };
 };
 
+export const updateBulk = (data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchConsult(
+        "actualizar-estado",
+        { data: data },
+        "PUT"
+      );
+      const body = await resp.json();
+      if (body.status === "success") {
+        swal.fire("Actualizado", body.msg, "success");
+        dispatch(inventoryStartLoading());
+        dispatch(addNewInventoryClear());
+      } else {
+        swal.fire("Error", "Error al actualizar en masa", "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const deleteBulk = (data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetchConsult(
+        "eliminar-registros",
+        { data: data },
+        "DELETE"
+      );
+      const body = await resp.json();
+      if (body.status === "success") {
+        swal.fire("Eliminados", body.msg, "success");
+        dispatch(inventoryStartLoading());
+        dispatch(addNewInventoryClear());
+      } else {
+        swal.fire("Error", body.msg, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 export const uploadImage = (file0, inventoryId) => {
   return async (dispatch) => {
     try {
@@ -114,13 +159,34 @@ export const uploadImage = (file0, inventoryId) => {
         dispatch(inventoryStartLoading());
       } else {
         dispatch(uploadImageInventoryError());
-        swal.fire("Error", body.msg, "error");
+        swal.fire("Error", "No se pudo subir la imagen", "error");
       }
     } catch (error) {
       console.log(error);
     }
   };
 };
+
+export const addInNewInventory = (inventory) => {
+  return async (dispatch) => {
+    dispatch(addInNewInventoryAction(inventory));
+  };
+};
+
+export const deleteInNewInventory = () => {
+  return async (dispatch) => {
+    dispatch(deleteInNewInventoryAction());
+  };
+};
+
+export const addInNewInventoryAction = (inventory) => ({
+  type: types.UPDATE_DELETE_INVENTORY_ADDED,
+  payload: inventory,
+});
+
+export const deleteInNewInventoryAction = () => ({
+  type: types.UPDATE_DELETE_INVENTORY_DELETED,
+});
 
 export const editInventorySuccess = (inventory) => ({
   type: types.INVENTORY_UPDATED,
@@ -150,6 +216,10 @@ const addInventorySuccess = () => ({
 
 const uploadImageInventorySuccess = () => ({
   type: types.INVENTORY_IMAGE_UPLOADED,
+});
+
+const addNewInventoryClear = () => ({
+  type: types.UPDATE_DELETE_INVENTORY_CLEAR,
 });
 
 const uploadImageInventoryError = () => ({
