@@ -122,11 +122,8 @@ describe("Pruebas en las acciones Inventario Vigente", () => {
       },
     }));
 
-    let formData = new FormData();
 
-    formData.append("file0", inventory);
-
-    await store.dispatch(uploadImage(inventory));
+    await store.dispatch(uploadImage(null));
     let actions = store.getActions();
 
      expect(actions[0]).toEqual({
