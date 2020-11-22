@@ -1,16 +1,18 @@
 import configureStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import "@testing-library/jest-dom";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
-import { storeInventory, updateBulk, uploadImage} from "../../actions/inventoryAction";
+import {
+  storeInventory,
+  updateBulk,
+} from "../../actions/inventoryAction";
 import { types } from "../../types/types";
 import * as fetchModule from "../../helpers/fetchService";
 
-
-jest.mock('sweetalert2', ()=> ({
-  fire: jest.fn()
-}))
+jest.mock("sweetalert2", () => ({
+  fire: jest.fn(),
+}));
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -93,7 +95,6 @@ describe("Pruebas en las acciones Inventario Vigente", () => {
     });
   });
 
-
   test("Actualizar en masa incorrecto", async () => {
     fetchModule.fetchConsult = jest.fn(() => ({
       json() {
@@ -107,33 +108,11 @@ describe("Pruebas en las acciones Inventario Vigente", () => {
     await store.dispatch(updateBulk(inventory));
     let actions = store.getActions();
 
-    expect( actions ).toEqual([]);
-    expect( Swal.fire ).toHaveBeenCalledWith("Error", 'Error al actualizar en masa', "error");
+    expect(actions).toEqual([]);
+    expect(Swal.fire).toHaveBeenCalledWith(
+      "Error",
+      "Error al actualizar en masa",
+      "error"
+    );
   });
-
-
-  test("Subir imagen al inventario incorrecto", async () => {
-    fetchModule.fetchConsult = jest.fn(() => ({
-      json() {
-        return {
-          msg: "error",
-          status: "error",
-        };
-      },
-    }));
-
-
-    await store.dispatch(uploadImage(null));
-    let actions = store.getActions();
-
-     expect(actions[0]).toEqual({
-      type: types.INVENTORY_IMAGE_UPLOAD_ERROR,
-    });    
-
-
-    expect( Swal.fire ).toHaveBeenCalledWith("Error", 'No se pudo subir la imagen', "error");
-  });
-
-
-
 });
