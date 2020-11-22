@@ -11,14 +11,20 @@ import {
   inventoryStartLoading,
   deleteOneInventory,
   inventoryClearActive,
+  addInNewInventory,
+  deleteInNewInventory,
+  updateBulk,
+  deleteBulk,
 } from "../../actions/inventoryAction";
-
-import moment from "moment";
 
 export const InventoryScreen = () => {
   const dispatch = useDispatch();
 
-  const { inventory, count } = useSelector((state) => state.inventory);
+  const baseUrl = process.env.REACT_APP_API_URL;
+
+  const { inventory, count, updateDeleteManyInventory } = useSelector(
+    (state) => state.inventory
+  );
 
   const { role } = useSelector((state) => state.auth);
 
@@ -55,7 +61,7 @@ export const InventoryScreen = () => {
     openModal();
   };
 
-  const openModal = (e) => {
+  const openModal = () => {
     dispatch(uiOpenModal());
   };
 
@@ -71,13 +77,72 @@ export const InventoryScreen = () => {
     const { value } = e.target;
     setValue(value);
   };
+
+  const toggleCheckbox = (e, item) => {
+    if (e.target.checked) {
+      dispatch(addInNewInventory(item));
+    } else {
+      dispatch(inventorySetActive(item));
+      dispatch(deleteInNewInventory());
+    }
+  };
+  const updateInBulk = () => {
+    swal
+      .fire({
+        title: "¿Estas seguro?",
+        text: "Estos registros no se podran cambiar",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, Actualizalos!!",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.value) {
+          if (updateDeleteManyInventory.length > 0) {
+            dispatch(updateBulk(updateDeleteManyInventory));
+          } else {
+            console.log("primero dale check a algun registro");
+          }
+        } else {
+          dispatch(inventoryClearActive());
+        }
+      });
+  };
+
+  const deleteInBulk = () => {
+    swal
+      .fire({
+        title: "¿Estas seguro?",
+        text: "Estos registros no se volerá a recuperar",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, eliminar!!",
+        cancelButtonText: "Cancelar",
+      })
+      .then((result) => {
+        if (result.value) {
+          if (updateDeleteManyInventory.length > 0) {
+            dispatch(deleteBulk(updateDeleteManyInventory));
+          } else {
+            console.log("primero dale check a algun registro");
+          }
+        } else {
+          dispatch(inventoryClearActive());
+        }
+      });
+  };
+
   return (
     <div>
       <div>
         <h4 className="center-align">Inventario vigente del ganado</h4>
       </div>
       <div hidden={role === "ROLE_VIEWER"} className="center-align">
-        <button onClick={addInventory} className="btn  teal darken-2">
+        <button onClick={addInventory} className="btn green darken-4">
           <i className="material-icons right">cloud</i>Agregar animal
         </button>
       </div>
@@ -100,6 +165,23 @@ export const InventoryScreen = () => {
         </div>
       </div>
       <br></br>
+      <div
+        hidden={
+          updateDeleteManyInventory.length === 0 &&
+          role === "ROLE_ADMINISTRATOR"
+        }
+      >
+        <button className="btn red accent-4" onClick={() => deleteInBulk()}>
+          <i className="material-icons right">delete</i> Eliminar animales
+        </button>
+
+        <button className="btn yellow darken-4" onClick={() => updateInBulk()}>
+          <i className="material-icons right">edit</i> Marcar como vendidos
+        </button>
+      </div>
+
+      <br></br>
+
       <SearchResults
         value={value}
         data={inventory}
@@ -107,8 +189,8 @@ export const InventoryScreen = () => {
           <table className="responsive-table striped highlight indigo lighten-4">
             <thead>
               <tr>
-                <th>Nº de animal</th>
                 <th>Foto</th>
+                <th>Nº de animal</th>
                 <th>Raza</th>
                 <th>Peso</th>
                 <th>Edad</th>
@@ -119,12 +201,34 @@ export const InventoryScreen = () => {
             <tbody>
               {results.map((item) => (
                 <tr key={item._id}>
-                  <th>{item.animal_number}</th>
-                  <th>{item.image}</th>
+                  <th>
+                    <img
+                      alt=""
+                      src={
+                        item.image
+                          ? `${baseUrl}/inventory-file/${item.image}`
+                          : "https://becagrafic.com/wp-content/uploads/2019/09/imagen-no-disponible.jpg"
+                      }
+                      height="200"
+                      width="200"
+                    />
+                  </th>
+                  <th>
+                    <p>
+                      <label>
+                        <input
+                          type="checkbox"
+                          value={item._id}
+                          onChange={(e) => toggleCheckbox(e, item)}
+                        />
+                        <span className="black-text">{item.animal_number}</span>
+                      </label>
+                    </p>
+                  </th>
                   <th>{item.breed}</th>
                   <th>{item.weight}</th>
                   <th>{item.age_in_months}</th>
-                  <th>{moment(item.id).format("MMM DD, YYYY HH:MM")}</th>
+                  <th>{item.date}</th>
                   <th hidden={role === "ROLE_VIEWER"}>
                     <button
                       onClick={() => onSelectInventory(item)}
