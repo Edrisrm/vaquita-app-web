@@ -1,7 +1,6 @@
 import { types } from "../types/types";
 import { fetchConsult, uploadImageInventory } from "../helpers/fetchService";
 import swal from "sweetalert2";
-import moment from "moment";
 
 export function storeInventory(inventory) {
   return async (dispatch) => {
@@ -143,7 +142,7 @@ export const deleteBulk = (data) => {
 
 export const uploadImage = (file0, inventoryId) => {
   return async (dispatch) => {
-    try {
+   
       let formData = new FormData();
 
       formData.append("file0", file0);
@@ -161,9 +160,7 @@ export const uploadImage = (file0, inventoryId) => {
         dispatch(uploadImageInventoryError());
         swal.fire("Error", "No se pudo subir la imagen", "error");
       }
-    } catch (error) {
-      console.log(error);
-    }
+
   };
 };
 
