@@ -226,7 +226,7 @@ export const InventoryScreen = () => {
                     </p>
                   </th>
                   <th>{item.breed}</th>
-                  <th>{item.weight}</th>
+                  <th>{item.weight}kg</th>
                   <th>{item.age_in_months}</th>
                   <th>{item.date}</th>
                   <th hidden={role === "ROLE_VIEWER"}>
@@ -252,7 +252,7 @@ export const InventoryScreen = () => {
       <br></br>
       <div className="center-align">
         <ReactPaginate
-          pageCount={Math.ceil(count / 2)}
+          pageCount={Math.ceil(count / 10)}
           pageRangeDisplayed={2}
           marginPagesDisplayed={1}
           previousLabel={"Atras"}
