@@ -11,6 +11,8 @@ export const RecordsScreen = () => {
   const { records, count } = useSelector((state) => state.records);
   const [value, setValue] = useState("");
 
+  const baseUrl = process.env.REACT_APP_API_URL;
+
   const handleChange = (e) => {
     const { value } = e.target;
     setValue(value);
@@ -65,7 +67,18 @@ export const RecordsScreen = () => {
               {results.map((item, index) => (
                 <tr key={index}>
                   <th>{item.animal_number}</th>
-                  <th>{item.image}</th>
+                  <th>
+                    <img
+                      alt=""
+                      src={
+                        item.image
+                          ? `${baseUrl}/inventory-file/${item.image}`
+                          : "https://becagrafic.com/wp-content/uploads/2019/09/imagen-no-disponible.jpg"
+                      }
+                      height="200"
+                      width="200"
+                    />
+                  </th>
                   <th>{item.breed}</th>
                   <th>{item.weight}</th>
                   <th>{item.date}</th>
