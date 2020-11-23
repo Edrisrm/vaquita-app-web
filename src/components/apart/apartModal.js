@@ -54,7 +54,7 @@ export const ApartModal = () => {
     }
 
     if (currentApart) {
-      console.log("actualizacion");
+    
     } else {
       dispatch(storeApart(formValues));
     }
