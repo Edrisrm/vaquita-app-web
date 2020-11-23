@@ -80,7 +80,7 @@ export const RecordsScreen = () => {
                     />
                   </th>
                   <th>{item.breed}</th>
-                  <th>{item.weight}</th>
+                  <th>{item.weight}kg</th>
                   <th>{item.date}</th>
                 </tr>
               ))}
