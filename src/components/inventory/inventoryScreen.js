@@ -252,7 +252,7 @@ export const InventoryScreen = () => {
       <br></br>
       <div className="center-align">
         <ReactPaginate
-          pageCount={Math.ceil(count / 2)}
+          pageCount={Math.ceil(count / 10)}
           pageRangeDisplayed={2}
           marginPagesDisplayed={1}
           previousLabel={"Atras"}
