@@ -193,7 +193,7 @@ export const InventoryScreen = () => {
                 <th>Raza</th>
                 <th>Peso</th>
                 <th>Edad</th>
-                <th>Fecha de registro</th>
+                <th>Fecha de registroooo</th>
                 <th hidden={role === "ROLE_VIEWER"}>Acciones</th>
               </tr>
             </thead>
