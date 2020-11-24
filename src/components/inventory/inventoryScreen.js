@@ -167,8 +167,7 @@ export const InventoryScreen = () => {
       <br></br>
       <div
         hidden={
-          updateDeleteManyInventory.length === 0 &&
-          role === "ROLE_ADMINISTRATOR"
+          updateDeleteManyInventory.length === 0 || role === "ROLE_VIEWER"
         }
       >
         <button className="btn red accent-4" onClick={() => deleteInBulk()}>
@@ -215,7 +214,7 @@ export const InventoryScreen = () => {
                   </th>
                   <th>
                     <p>
-                      <label>
+                      <label hidden={role === "ROLE_VIEWER"}>
                         <input
                           type="checkbox"
                           value={item._id}
@@ -223,6 +222,12 @@ export const InventoryScreen = () => {
                         />
                         <span className="black-text">{item.animal_number}</span>
                       </label>
+                      <span
+                        className="black-text"
+                        hidden={role !== "ROLE_VIEWER"}
+                      >
+                        {item.animal_number}
+                      </span>
                     </p>
                   </th>
                   <th>{item.breed}</th>
